@@ -40,9 +40,82 @@ $arrow = syseze_arrow();
 					<?php the_post_thumbnail( 'syseze-featured' ); ?>
 				</div>
 			<?php else : ?>
-				<div class="image-placeholder reveal delay-1">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-					<span class="lbl"><?php esc_html_e( 'Set a Featured Image to replace', 'syseze' ); ?></span>
+				<div class="about-illustration reveal delay-1" aria-hidden="true">
+					<svg viewBox="0 0 480 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<!-- Grid dots -->
+						<defs>
+							<pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+								<circle cx="2" cy="2" r="1.5" fill="rgba(99,102,241,0.18)"/>
+							</pattern>
+							<radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stop-color="#06b6d4" stop-opacity="0.15"/>
+								<stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+							</radialGradient>
+							<radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.12"/>
+								<stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
+							</radialGradient>
+						</defs>
+						<rect width="480" height="380" fill="url(#dots)"/>
+						<!-- Glow blobs -->
+						<ellipse cx="160" cy="180" rx="140" ry="120" fill="url(#glow2)"/>
+						<ellipse cx="340" cy="200" rx="120" ry="100" fill="url(#glow1)"/>
+						<!-- Connection lines -->
+						<line x1="240" y1="80" x2="120" y2="180" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="240" y1="80" x2="360" y2="160" stroke="rgba(6,182,212,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="120" y1="180" x2="100" y2="290" stroke="rgba(99,102,241,0.25)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="360" y1="160" x2="380" y2="280" stroke="rgba(6,182,212,0.25)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="120" y1="180" x2="240" y2="260" stroke="rgba(139,92,246,0.2)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="360" y1="160" x2="240" y2="260" stroke="rgba(139,92,246,0.2)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="100" y1="290" x2="240" y2="260" stroke="rgba(6,182,212,0.2)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<line x1="380" y1="280" x2="240" y2="260" stroke="rgba(99,102,241,0.2)" stroke-width="1.5" stroke-dasharray="4 4"/>
+						<!-- Central node — cloud -->
+						<circle cx="240" cy="80" r="36" fill="rgba(15,23,42,0.9)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
+						<path d="M224 86h-4a8 8 0 0 1 0-16 7.9 7.9 0 0 1 15.3-2A6 6 0 1 1 256 74v1h-32z" fill="none" stroke="#06b6d4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+						<!-- Left node — shield -->
+						<circle cx="120" cy="180" r="30" fill="rgba(15,23,42,0.9)" stroke="rgba(139,92,246,0.6)" stroke-width="1.5"/>
+						<path d="M120 166l-10 4v8c0 6 4.5 11 10 13 5.5-2 10-7 10-13v-8l-10-4z" fill="none" stroke="#8b5cf6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+						<!-- Right node — network -->
+						<circle cx="360" cy="160" r="30" fill="rgba(15,23,42,0.9)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+						<circle cx="360" cy="156" r="3" fill="#06b6d4"/>
+						<circle cx="350" cy="166" r="2.5" fill="#06b6d4" opacity="0.7"/>
+						<circle cx="370" cy="166" r="2.5" fill="#06b6d4" opacity="0.7"/>
+						<circle cx="345" cy="158" r="2" fill="#06b6d4" opacity="0.5"/>
+						<circle cx="375" cy="158" r="2" fill="#06b6d4" opacity="0.5"/>
+						<line x1="360" y1="156" x2="350" y2="166" stroke="#06b6d4" stroke-width="1.2" opacity="0.6"/>
+						<line x1="360" y1="156" x2="370" y2="166" stroke="#06b6d4" stroke-width="1.2" opacity="0.6"/>
+						<line x1="360" y1="156" x2="345" y2="158" stroke="#06b6d4" stroke-width="1.2" opacity="0.4"/>
+						<line x1="360" y1="156" x2="375" y2="158" stroke="#06b6d4" stroke-width="1.2" opacity="0.4"/>
+						<!-- Bottom-left node — server -->
+						<circle cx="100" cy="290" r="28" fill="rgba(15,23,42,0.9)" stroke="rgba(99,102,241,0.5)" stroke-width="1.5"/>
+						<rect x="88" y="280" width="24" height="7" rx="1.5" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+						<rect x="88" y="290" width="24" height="7" rx="1.5" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+						<circle cx="108" cy="283.5" r="1.5" fill="#6366f1"/>
+						<circle cx="108" cy="293.5" r="1.5" fill="#6366f1"/>
+						<!-- Bottom-right node — lock -->
+						<circle cx="380" cy="280" r="28" fill="rgba(15,23,42,0.9)" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+						<rect x="371" y="279" width="18" height="13" rx="2" fill="none" stroke="#06b6d4" stroke-width="1.5"/>
+						<path d="M374 279v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round"/>
+						<circle cx="380" cy="286" r="2" fill="#06b6d4"/>
+						<!-- Centre bottom node — identity -->
+						<circle cx="240" cy="260" r="32" fill="rgba(15,23,42,0.95)" stroke="rgba(139,92,246,0.7)" stroke-width="2"/>
+						<circle cx="240" cy="252" r="6" fill="none" stroke="#8b5cf6" stroke-width="1.8"/>
+						<path d="M226 270a14 14 0 0 1 28 0" fill="none" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round"/>
+						<!-- Floating particles -->
+						<circle cx="190" cy="120" r="2.5" fill="#06b6d4" opacity="0.5"/>
+						<circle cx="310" cy="110" r="2" fill="#8b5cf6" opacity="0.4"/>
+						<circle cx="160" cy="240" r="2" fill="#6366f1" opacity="0.5"/>
+						<circle cx="420" cy="220" r="2.5" fill="#06b6d4" opacity="0.4"/>
+						<circle cx="60" cy="200" r="2" fill="#8b5cf6" opacity="0.4"/>
+						<circle cx="290" cy="320" r="2" fill="#6366f1" opacity="0.4"/>
+						<!-- Labels -->
+						<text x="240" y="130" text-anchor="middle" fill="rgba(6,182,212,0.7)" font-size="9" font-family="monospace" letter-spacing="1">CLOUD</text>
+						<text x="78" y="222" text-anchor="middle" fill="rgba(139,92,246,0.7)" font-size="9" font-family="monospace" letter-spacing="1">SECURITY</text>
+						<text x="362" y="204" text-anchor="middle" fill="rgba(6,182,212,0.7)" font-size="9" font-family="monospace" letter-spacing="1">NETWORK</text>
+						<text x="100" y="334" text-anchor="middle" fill="rgba(99,102,241,0.7)" font-size="9" font-family="monospace" letter-spacing="1">INFRA</text>
+						<text x="380" y="324" text-anchor="middle" fill="rgba(6,182,212,0.7)" font-size="9" font-family="monospace" letter-spacing="1">ACCESS</text>
+						<text x="240" y="308" text-anchor="middle" fill="rgba(139,92,246,0.8)" font-size="9" font-family="monospace" letter-spacing="1">IDENTITY</text>
+					</svg>
 				</div>
 			<?php endif; ?>
 		</div>
