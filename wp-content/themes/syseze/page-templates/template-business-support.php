@@ -23,6 +23,16 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
+<section class="stats-section">
+	<div class="container">
+		<div class="stats stats-3">
+			<div class="stat reveal"><div class="stat-num">&lt; 15 min</div><div class="stat-label">Critical response time</div></div>
+			<div class="stat reveal delay-1"><div class="stat-num">24/7</div><div class="stat-label">Support coverage</div></div>
+			<div class="stat reveal delay-2"><div class="stat-num">95%</div><div class="stat-label">Client retention rate</div></div>
+		</div>
+	</div>
+</section>
+
 <section class="section">
 	<div class="container">
 		<div class="section-head reveal">
@@ -135,6 +145,35 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Get the support your business actually deserves.', 'Talk to our team. We’ll scope a model that fits your real volume — not a worst-case retainer.', 'Talk to Our Support Team' ); ?>
+<section class="section">
+	<div class="container">
+		<div class="section-head reveal">
+			<span class="eyebrow">Explore more</span>
+			<h2>Related services</h2>
+		</div>
+		<div class="related-services">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘cyber-security’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+				<h4>Cyber Security</h4>
+				<p>Add security monitoring and incident response to your support package.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘network-design’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/></svg></div>
+				<h4>Network Design</h4>
+				<p>A well-designed network reduces the support burden dramatically.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘it-consulting’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+				<h4>IT Consulting</h4>
+				<p>Strategic planning to help you invest in IT that actually reduces overhead.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+		</div>
+	</div>
+</section>
+
+<?php syseze_cta_banner( ‘Get the support your business actually deserves.’, ‘Talk to our team. We\’ll scope a model that fits your real volume — not a worst-case retainer.’, ‘Talk to Our Support Team’ ); ?>
 
 <?php get_footer(); ?>

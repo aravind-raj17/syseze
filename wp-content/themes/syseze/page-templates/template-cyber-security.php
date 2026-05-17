@@ -23,6 +23,16 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
+<section class="stats-section">
+	<div class="container">
+		<div class="stats stats-3">
+			<div class="stat reveal"><div class="stat-num">500+</div><div class="stat-label">Threats neutralized</div></div>
+			<div class="stat reveal delay-1"><div class="stat-num">&lt; 1 hr</div><div class="stat-label">Incident response SLA</div></div>
+			<div class="stat reveal delay-2"><div class="stat-num">ISO</div><div class="stat-label">27001 aligned practice</div></div>
+		</div>
+	</div>
+</section>
+
 <section class="section">
 	<div class="container">
 		<div class="section-head reveal">
@@ -136,6 +146,35 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Don’t wait for an incident to take security seriously.', 'A free security audit will surface your highest-impact gaps in 30 minutes.', 'Book a Free Security Audit' ); ?>
+<section class="section">
+	<div class="container">
+		<div class="section-head reveal">
+			<span class="eyebrow">Explore more</span>
+			<h2>Related services</h2>
+		</div>
+		<div class="related-services">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘network-design’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/></svg></div>
+				<h4>Network Design</h4>
+				<p>Segmented, zero-trust network architecture that shrinks your attack surface.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘it-consulting’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+				<h4>IT Consulting</h4>
+				<p>Security-led technology roadmaps that keep compliance front and center.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘cloud-services’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+				<h4>Cloud Services</h4>
+				<p>Secure cloud environments with proper IAM, encryption, and monitoring.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+		</div>
+	</div>
+</section>
+
+<?php syseze_cta_banner( ‘Don\’t wait for an incident to take security seriously.’, ‘A free security audit will surface your highest-impact gaps in 30 minutes.’, ‘Book a Free Security Audit’ ); ?>
 
 <?php get_footer(); ?>

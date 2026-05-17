@@ -23,6 +23,16 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
+<section class="stats-section">
+	<div class="container">
+		<div class="stats stats-3">
+			<div class="stat reveal"><div class="stat-num">300+</div><div class="stat-label">Networks designed</div></div>
+			<div class="stat reveal delay-1"><div class="stat-num">6</div><div class="stat-label">Vendor partnerships</div></div>
+			<div class="stat reveal delay-2"><div class="stat-num">99.9%</div><div class="stat-label">Network uptime delivered</div></div>
+		</div>
+	</div>
+</section>
+
 <section class="section">
 	<div class="container">
 		<div class="section-head reveal">
@@ -136,6 +146,35 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Build a network you can stop worrying about.', 'Start with a network assessment. We’ll review your topology, traffic, and gaps in a single working session.', 'Book a Network Assessment' ); ?>
+<section class="section">
+	<div class="container">
+		<div class="section-head reveal">
+			<span class="eyebrow">Explore more</span>
+			<h2>Related services</h2>
+		</div>
+		<div class="related-services">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘cyber-security’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+				<h4>Cyber Security</h4>
+				<p>Harden the network we build — firewalls, segmentation, and threat monitoring.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘business-support’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+				<h4>Business Support</h4>
+				<p>24/7 network monitoring and managed support after deployment.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘migration-services’ ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div>
+				<h4>Migration Services</h4>
+				<p>Move your infrastructure to a new network without downtime.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+		</div>
+	</div>
+</section>
+
+<?php syseze_cta_banner( ‘Build a network you can stop worrying about.’, ‘Start with a network assessment. We\’ll review your topology, traffic, and gaps in a single working session.’, ‘Book a Network Assessment’ ); ?>
 
 <?php get_footer(); ?>

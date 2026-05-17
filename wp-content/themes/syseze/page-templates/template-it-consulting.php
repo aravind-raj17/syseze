@@ -23,6 +23,16 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
+<section class="stats-section">
+	<div class="container">
+		<div class="stats stats-3">
+			<div class="stat reveal"><div class="stat-num">100+</div><div class="stat-label">Strategic roadmaps delivered</div></div>
+			<div class="stat reveal delay-1"><div class="stat-num">12+</div><div class="stat-label">Industries served</div></div>
+			<div class="stat reveal delay-2"><div class="stat-num">6+</div><div class="stat-label">Years of consulting practice</div></div>
+		</div>
+	</div>
+</section>
+
 <section class="section">
 	<div class="container">
 		<div class="section-head reveal">
@@ -131,6 +141,35 @@ $arrow = syseze_arrow();
 				<button class="faq-q" aria-expanded="false"><span>Can you help us if we’re not sure what we need?</span><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 19 12"/></svg></span></button>
 				<div class="faq-a"><p>That’s often the best time to bring us in. The first conversation is free.</p></div>
 			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section">
+	<div class="container">
+		<div class="section-head reveal">
+			<span class="eyebrow">Explore more</span>
+			<h2>Related services</h2>
+		</div>
+		<div class="related-services">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( 'cloud-services' ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+				<h4>Cloud Services</h4>
+				<p>Implement the cloud strategy we design together — hands-on and end-to-end.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( 'network-design' ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/></svg></div>
+				<h4>Network Design</h4>
+				<p>Future-proof network infrastructure that grows with your roadmap.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( 'business-support' ) ); ?>">
+				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+				<h4>Business Support</h4>
+				<p>Ongoing managed IT support once your new infrastructure is in place.</p>
+				<span class="rc-arrow">Learn more →</span>
+			</a>
 		</div>
 	</div>
 </section>
