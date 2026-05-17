@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs & temp
+*.log
+*.tmp
+
+# WordPress — never commit these
+wp-config.php
+wp-config-sample.php
+
+# Node (if you ever add a build step)
+node_modules/
