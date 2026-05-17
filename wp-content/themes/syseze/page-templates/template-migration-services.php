@@ -153,19 +153,19 @@ $arrow = syseze_arrow();
 			<h2>Related services</h2>
 		</div>
 		<div class="related-services">
-			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘cloud-services’ ) ); ?>">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( 'cloud-services' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
 				<h4>Cloud Services</h4>
 				<p>Post-migration cloud management, cost optimization, and ongoing operations.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘it-consulting’ ) ); ?>">
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( 'it-consulting' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
 				<h4>IT Consulting</h4>
 				<p>Strategic planning that ensures you migrate to the right destination.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘business-support’ ) ); ?>">
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( 'business-support' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
 				<h4>Business Support</h4>
 				<p>Managed IT support to stabilize and operate your new environment.</p>

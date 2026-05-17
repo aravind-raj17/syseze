@@ -153,19 +153,19 @@ $arrow = syseze_arrow();
 			<h2>Related services</h2>
 		</div>
 		<div class="related-services">
-			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘network-design’ ) ); ?>">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( 'network-design' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/></svg></div>
 				<h4>Network Design</h4>
 				<p>Segmented, zero-trust network architecture that shrinks your attack surface.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘it-consulting’ ) ); ?>">
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( 'it-consulting' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
 				<h4>IT Consulting</h4>
 				<p>Security-led technology roadmaps that keep compliance front and center.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘cloud-services’ ) ); ?>">
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( 'cloud-services' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
 				<h4>Cloud Services</h4>
 				<p>Secure cloud environments with proper IAM, encryption, and monitoring.</p>

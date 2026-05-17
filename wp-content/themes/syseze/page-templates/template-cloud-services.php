@@ -153,19 +153,19 @@ $arrow = syseze_arrow();
 			<h2>Related services</h2>
 		</div>
 		<div class="related-services">
-			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( ‘migration-services’ ) ); ?>">
+			<a class="related-card reveal" href="<?php echo esc_url( syseze_page_url( 'migration-services' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div>
 				<h4>Migration Services</h4>
 				<p>Zero-downtime moves to the cloud, planned and validated at every step.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( ‘cyber-security’ ) ); ?>">
+			<a class="related-card reveal delay-1" href="<?php echo esc_url( syseze_page_url( 'cyber-security' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
 				<h4>Cyber Security</h4>
 				<p>Secure your cloud environment against modern threats and compliance gaps.</p>
 				<span class="rc-arrow">Learn more →</span>
 			</a>
-			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( ‘it-consulting’ ) ); ?>">
+			<a class="related-card reveal delay-2" href="<?php echo esc_url( syseze_page_url( 'it-consulting' ) ); ?>">
 				<div class="rc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
 				<h4>IT Consulting</h4>
 				<p>Strategic roadmaps that align your cloud investment with business goals.</p>
