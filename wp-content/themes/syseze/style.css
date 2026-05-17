@@ -1,0 +1,17 @@
+/*
+Theme Name: SysEze
+Theme URI: https://syseze.com
+Author: Aravind Raj R
+Author URI: https://syseze.com
+Description: Custom theme for SysEze Tech Pvt Ltd — IT infrastructure, cloud, and cybersecurity. Dark, modern, fully editable through the WordPress admin (pages, menus, custom post types, and the Customizer).
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.5
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: syseze
+Tags: business, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+*/
+
+/* Theme styles live in assets/css/styles.css and assets/css/pages.css — enqueued in functions.php */
