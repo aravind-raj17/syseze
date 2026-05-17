@@ -118,7 +118,7 @@ add_action( 'customize_register', function ( $wp_customize ) {
 		'type'    => 'text',
 	) );
 	$wp_customize->add_setting( 'syseze_footer_credit', array(
-		'default'           => 'Designed by Aravind Raj R',
+		'default'           => 'Designed by Syseze.com',
 		'sanitize_callback' => 'sanitize_text_field',
 	) );
 	$wp_customize->add_control( 'syseze_footer_credit', array(

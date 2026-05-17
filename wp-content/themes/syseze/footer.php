@@ -12,7 +12,7 @@ $phone_tel = preg_replace( '/[^0-9+]/', '', $phone );
 $email     = syseze_mod( 'syseze_contact_email', 'hello@syseze.com' );
 $tagline   = syseze_mod( 'syseze_footer_tagline', 'IT infrastructure, cloud, and cybersecurity solutions for businesses ready to scale.' );
 $copy      = syseze_mod( 'syseze_footer_copyright', '© ' . date( 'Y' ) . ' SysEze Tech Pvt Ltd. All rights reserved.' );
-$credit    = syseze_mod( 'syseze_footer_credit', 'Designed by Aravind Raj R' );
+$credit    = syseze_mod( 'syseze_footer_credit', 'Designed by Syseze.com' );
 ?>
 </main>
 
