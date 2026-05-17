@@ -29,17 +29,11 @@ $arrow = syseze_arrow();
 	<div class="container">
 		<div class="two-col">
 			<div class="reveal">
-				<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-					<span class="eyebrow"><?php esc_html_e( 'Our Story', 'syseze' ); ?></span>
-					<?php if ( get_the_content() ) : ?>
-						<?php the_content(); ?>
-					<?php else : ?>
-						<h2><?php esc_html_e( 'From a small team to a trusted IT partner', 'syseze' ); ?></h2>
-						<p><?php esc_html_e( 'SysEze began in 2019 as PC Services.in, a small team obsessed with one thing: making IT genuinely easy for the businesses we served. As our clients grew, so did the complexity of their challenges — and so did we.', 'syseze' ); ?></p>
-						<p><?php esc_html_e( 'Today, as SysEze Tech Pvt Ltd, we deliver end-to-end IT infrastructure solutions to businesses of every size. From startups setting up their first cloud environment to established enterprises modernizing decades-old systems, we bring the same principle to every engagement: clear thinking, careful execution, and honest support.', 'syseze' ); ?></p>
-						<p><?php esc_html_e( 'We don\'t believe in bloated retainers or one-size-fits-all packages. We believe in solving the right problem, the right way, the first time.', 'syseze' ); ?></p>
-					<?php endif; ?>
-				<?php endwhile; endif; ?>
+				<span class="eyebrow"><?php esc_html_e( 'Our Story', 'syseze' ); ?></span>
+				<h2><?php esc_html_e( 'From a small team to a trusted IT partner', 'syseze' ); ?></h2>
+				<p><?php esc_html_e( 'SysEze began in 2019 as PC Services.in, a small team obsessed with one thing: making IT genuinely easy for the businesses we served. As our clients grew, so did the complexity of their challenges — and so did we.', 'syseze' ); ?></p>
+				<p><?php esc_html_e( 'Today, as SysEze Tech Pvt Ltd, we deliver end-to-end IT infrastructure solutions to businesses of every size. From startups setting up their first cloud environment to established enterprises modernizing decades-old systems, we bring the same principle to every engagement: clear thinking, careful execution, and honest support.', 'syseze' ); ?></p>
+				<p><?php esc_html_e( "We don't believe in bloated retainers or one-size-fits-all packages. We believe in solving the right problem, the right way, the first time.", 'syseze' ); ?></p>
 			</div>
 			<?php if ( has_post_thumbnail() ) : ?>
 				<div class="reveal delay-1" style="border-radius:var(--radius-lg); overflow:hidden;">
