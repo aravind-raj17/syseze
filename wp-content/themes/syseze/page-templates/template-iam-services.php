@@ -90,6 +90,71 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
+<section class="section" style="background:linear-gradient(180deg, transparent, rgba(17,24,39,0.4) 50%, transparent);">
+	<div class="container">
+		<div class="section-head reveal">
+			<span class="eyebrow">NetIQ IAM Solutions</span>
+			<h2>Deep expertise in the NetIQ stack</h2>
+			<p>We design, deploy, and support the full NetIQ identity suite — NAM, IDM, IG, and eDirectory — across complex enterprise environments.</p>
+		</div>
+		<div class="netiq-grid">
+
+			<div class="netiq-card reveal">
+				<span class="netiq-badge">NAM</span>
+				<h3>NetIQ Access Manager</h3>
+				<p>Enterprise web SSO and federation platform that secures access to web applications across on-prem and cloud environments.</p>
+				<ul class="netiq-features">
+					<li>SAML 2.0, OAuth 2.0 &amp; OpenID Connect federation</li>
+					<li>Web application firewall and reverse proxy</li>
+					<li>Policy-based access control per application</li>
+					<li>Risk-based step-up authentication</li>
+					<li>Integration with Active Directory, eDirectory &amp; LDAP</li>
+				</ul>
+			</div>
+
+			<div class="netiq-card reveal delay-1">
+				<span class="netiq-badge">IDM</span>
+				<h3>NetIQ Identity Manager</h3>
+				<p>Driver-based identity provisioning engine that synchronises user data and automates the full joiner-mover-leaver lifecycle across all connected systems.</p>
+				<ul class="netiq-features">
+					<li>200+ out-of-the-box connectors (AD, SAP, JDBC, LDAP, REST)</li>
+					<li>Automated provisioning and de-provisioning workflows</li>
+					<li>Role-based entitlement assignment</li>
+					<li>Password sync and self-service reset across directories</li>
+					<li>Real-time bidirectional data synchronisation</li>
+				</ul>
+			</div>
+
+			<div class="netiq-card reveal">
+				<span class="netiq-badge">IG</span>
+				<h3>NetIQ Identity Governance</h3>
+				<p>Access governance platform for continuous visibility into who has access to what — and whether they should still have it.</p>
+				<ul class="netiq-features">
+					<li>Periodic access certification and review campaigns</li>
+					<li>Separation of duties (SoD) conflict detection</li>
+					<li>Role mining and role lifecycle management</li>
+					<li>Risk scoring for entitlements and identities</li>
+					<li>Audit-ready reports for ISO 27001, SOX &amp; GDPR</li>
+				</ul>
+			</div>
+
+			<div class="netiq-card reveal delay-1">
+				<span class="netiq-badge">eDirectory</span>
+				<h3>NetIQ eDirectory</h3>
+				<p>High-performance, X.500-compliant LDAP directory service — the backbone of the NetIQ identity stack and a standalone enterprise directory in its own right.</p>
+				<ul class="netiq-features">
+					<li>Cross-platform: Linux, Windows, Solaris</li>
+					<li>Multi-master replication with sub-second convergence</li>
+					<li>Fine-grained ACLs and attribute-level security</li>
+					<li>Native integration with IDM, NAM &amp; IG</li>
+					<li>Scales to hundreds of millions of objects</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</section>
+
 <section class="section">
 	<div class="container">
 		<div class="section-head reveal">
@@ -97,12 +162,14 @@ $arrow = syseze_arrow();
 			<h2>Platforms we work with</h2>
 		</div>
 		<div class="tech-strip reveal delay-1">
+			<span class="tech-chip"><span class="dot"></span>NetIQ NAM</span>
+			<span class="tech-chip"><span class="dot"></span>NetIQ IDM</span>
+			<span class="tech-chip"><span class="dot"></span>NetIQ IG</span>
+			<span class="tech-chip"><span class="dot"></span>eDirectory</span>
 			<span class="tech-chip"><span class="dot"></span>Microsoft Entra ID</span>
 			<span class="tech-chip"><span class="dot"></span>Okta</span>
 			<span class="tech-chip"><span class="dot"></span>CyberArk</span>
-			<span class="tech-chip"><span class="dot"></span>BeyondTrust</span>
 			<span class="tech-chip"><span class="dot"></span>SailPoint</span>
-			<span class="tech-chip"><span class="dot"></span>Azure AD B2C</span>
 		</div>
 	</div>
 </section>
