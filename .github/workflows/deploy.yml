@@ -18,8 +18,11 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: 21
           local-dir: ./wp-content/themes/syseze/
           server-dir: /wp-content/themes/syseze/
+          timeout: 60000
           exclude: |
             **/.git*
             **/.git*/**
