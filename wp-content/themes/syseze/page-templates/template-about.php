@@ -116,6 +116,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Ready to work with a team that gets it?', 'Book a free IT audit — no strings, no sales pressure. Just a clear look at where you are and what\'s possible.', 'Book a Free IT Audit' ); ?>
+<?php syseze_cta_banner( 'Ready to work with a team that gets it?', 'Book a free IT audit — no strings, no sales pressure. Just a clear look at where you are and what\'s possible.', 'Contact Us' ); ?>
 
 <?php get_footer(); ?>

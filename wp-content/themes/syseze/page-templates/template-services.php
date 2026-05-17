@@ -18,7 +18,7 @@ $arrow = syseze_arrow();
 		<h1 class="reveal delay-1">End-to-end IT services.<br/><span class="gradient-text">One trusted partner.</span></h1>
 		<p class="lead reveal delay-2">From cloud architecture to 24/7 support, every service is built around one goal: making your technology a quiet, reliable foundation for everything else.</p>
 		<div class="hero-ctas reveal delay-3" style="justify-content:center;">
-			<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary">Book a Free IT Audit</a>
+			<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary">Contact Us</a>
 			<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-ghost">Talk to an Expert</a>
 		</div>
 	</div>
@@ -94,6 +94,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Not sure which service you need?', 'That\'s exactly what our free audit is for. We\'ll listen, look at your setup, and tell you what we\'d actually do.', 'Book a Free IT Audit' ); ?>
+<?php syseze_cta_banner( 'Not sure which service you need?', 'That\'s exactly what our free audit is for. We\'ll listen, look at your setup, and tell you what we\'d actually do.', 'Contact Us' ); ?>
 
 <?php get_footer(); ?>

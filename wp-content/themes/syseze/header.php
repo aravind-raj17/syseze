@@ -51,11 +51,6 @@ $is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting
 			</ul>
 		</nav>
 
-		<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary nav-cta">
-			<?php esc_html_e( 'Get Free Audit', 'syseze' ); ?>
-			<?php echo syseze_arrow(); // phpcs:ignore ?>
-		</a>
-
 		<button class="hamburger" aria-label="<?php esc_attr_e( 'Open menu', 'syseze' ); ?>" aria-controls="mobile-menu">
 			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
 		</button>
@@ -77,7 +72,7 @@ $is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting
 		<a href="<?php echo esc_url( syseze_page_url( 'portfolio' ) ); ?>"><?php esc_html_e( 'Portfolio', 'syseze' ); ?></a>
 		<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'syseze' ); ?></a>
 		<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>"><?php esc_html_e( 'Contact', 'syseze' ); ?></a>
-		<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Get Free Audit', 'syseze' ); ?></a>
+		<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Contact Us', 'syseze' ); ?></a>
 	</div>
 </div>
 

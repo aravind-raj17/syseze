@@ -44,7 +44,7 @@ $arrow = syseze_arrow();
 </section>
 <?php endwhile; endif; ?>
 
-<?php syseze_cta_banner( 'Want a similar outcome for your business?', 'Start with a free audit — we\'ll map your current state and the highest-impact moves in 30 minutes.', 'Book a Free IT Audit' ); ?>
+<?php syseze_cta_banner( 'Want a similar outcome for your business?', 'Start with a free audit — we\'ll map your current state and the highest-impact moves in 30 minutes.', 'Contact Us' ); ?>
 
 <style>
 .post-content h2, .post-content h3 { color: var(--text); margin: 1.8em 0 0.6em; }

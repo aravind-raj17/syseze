@@ -93,6 +93,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Like what you see? Let\'s build the next one with you.', 'Start with a free audit — we\'ll surface the highest-impact moves for your business in 30 minutes.', 'Book a Free IT Audit' ); ?>
+<?php syseze_cta_banner( 'Like what you see? Let\'s build the next one with you.', 'Start with a free audit — we\'ll surface the highest-impact moves for your business in 30 minutes.', 'Contact Us' ); ?>
 
 <?php get_footer(); ?>

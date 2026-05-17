@@ -175,6 +175,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( "Don't wait for an incident to take security seriously.", "A free security audit will surface your highest-impact gaps in 30 minutes.", "Book a Free Security Audit" ); ?>
+<?php syseze_cta_banner( "Don't wait for an incident to take security seriously.", "A free security audit will surface your highest-impact gaps in 30 minutes.", "Contact Us" ); ?>
 
 <?php get_footer(); ?>

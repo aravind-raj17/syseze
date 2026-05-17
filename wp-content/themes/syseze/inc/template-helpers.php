@@ -44,7 +44,7 @@ function syseze_arrow() {
 /**
  * CTA banner (used on most pages).
  */
-function syseze_cta_banner( $heading = 'Ready to elevate your business?', $sub = 'Start with a free, no-obligation IT audit.', $btn = 'Book a Free IT Audit' ) {
+function syseze_cta_banner( $heading = 'Ready to elevate your business?', $sub = 'Start with a free, no-obligation IT audit.', $btn = 'Contact Us' ) {
 	$contact_url = esc_url( syseze_page_url( 'contact' ) );
 	?>
 	<section class="section">

@@ -20,7 +20,7 @@ $arrow = syseze_arrow();
 			<h1 class="reveal delay-1"><?php esc_html_e( 'Empowering Systems.', 'syseze' ); ?><br/><span class="gradient-text"><?php esc_html_e( 'Simplifying Success.', 'syseze' ); ?></span></h1>
 			<p class="lead reveal delay-2"><?php esc_html_e( 'End-to-end IT infrastructure, cloud, and cybersecurity solutions for businesses ready to scale.', 'syseze' ); ?></p>
 			<div class="hero-ctas reveal delay-3">
-				<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Book a Free IT Audit', 'syseze' ); ?> <?php echo $arrow; // phpcs:ignore ?></a>
+				<a href="<?php echo esc_url( syseze_page_url( 'contact' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Contact Us', 'syseze' ); ?> <?php echo $arrow; // phpcs:ignore ?></a>
 				<a href="<?php echo esc_url( syseze_page_url( 'services' ) ); ?>" class="btn btn-ghost"><?php esc_html_e( 'Explore Services', 'syseze' ); ?></a>
 			</div>
 		</div>
@@ -254,6 +254,6 @@ $arrow = syseze_arrow();
 </section>
 
 <!-- FINAL CTA -->
-<?php syseze_cta_banner( 'Ready to elevate your business?', 'Start with a free, no-obligation IT audit. We\'ll map your current state, surface the highest-impact improvements, and give you a written plan you can act on with or without us.', 'Book a Free IT Audit' ); ?>
+<?php syseze_cta_banner( 'Ready to elevate your business?', 'Start with a free, no-obligation IT audit. We\'ll map your current state, surface the highest-impact improvements, and give you a written plan you can act on with or without us.', 'Contact Us' ); ?>
 
 <?php get_footer(); ?>

@@ -174,6 +174,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( 'Make your next IT decision with confidence.', 'A 30-minute strategy call. No deck, no pitch — just a real conversation about your situation.', 'Book a Free Strategy Call' ); ?>
+<?php syseze_cta_banner( 'Make your next IT decision with confidence.', 'A 30-minute strategy call. No deck, no pitch — just a real conversation about your situation.', 'Contact Us' ); ?>
 
 <?php get_footer(); ?>
