@@ -192,7 +192,7 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<!-- TESTIMONIALS — dynamic, falls back to placeholders if no testimonials posted -->
+<!-- TESTIMONIALS — hidden until real reviews are added
 <section class="section" style="background: linear-gradient(180deg, transparent, rgba(17,24,39,0.4) 50%, transparent);">
 	<div class="container">
 		<div class="section-head reveal">
@@ -252,6 +252,7 @@ $arrow = syseze_arrow();
 		</div>
 	</div>
 </section>
+-->
 
 <!-- FINAL CTA -->
 <?php syseze_cta_banner( 'Ready to elevate your business?', 'Start with a free, no-obligation IT audit. We\'ll map your current state, surface the highest-impact improvements, and give you a written plan you can act on with or without us.', 'Contact Us' ); ?>
