@@ -116,54 +116,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<!-- Team — dynamic, falls back to placeholders -->
-<section class="section">
-	<div class="container">
-		<div class="section-head reveal">
-			<span class="eyebrow"><?php esc_html_e( 'The team', 'syseze' ); ?></span>
-			<h2><?php esc_html_e( 'The people behind SysEze', 'syseze' ); ?></h2>
-			<p><?php esc_html_e( 'A lean team of senior engineers, consultants, and support specialists — handpicked for both depth and discipline.', 'syseze' ); ?></p>
-		</div>
-		<div class="team-grid">
-			<?php
-			$team = new WP_Query( array( 'post_type' => 'team', 'posts_per_page' => 6, 'orderby' => 'menu_order date', 'order' => 'ASC' ) );
-			if ( $team->have_posts() ) :
-				$i = 0;
-				while ( $team->have_posts() ) : $team->the_post();
-					$role = get_post_meta( get_the_ID(), '_syseze_role', true );
-					$parts = preg_split( '/\s+/', trim( get_the_title() ) );
-					$initials = ''; foreach ( $parts as $p ) { $initials .= strtoupper( substr( $p, 0, 1 ) ); }
-					$initials = substr( $initials, 0, 2 );
-					$delay = $i ? ' delay-' . ( $i % 3 ) : '';
-					?>
-					<div class="team-card reveal<?php echo esc_attr( $delay ); ?>">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<div class="team-avatar" style="background:transparent; overflow:hidden;"><?php the_post_thumbnail( 'thumbnail', array( 'style' => 'width:100%;height:100%;object-fit:cover;border-radius:50%;' ) ); ?></div>
-						<?php else : ?>
-							<div class="team-avatar"><?php echo esc_html( $initials ); ?></div>
-						<?php endif; ?>
-						<h3><?php the_title(); ?></h3>
-						<?php if ( $role ) : ?><div class="role"><?php echo esc_html( $role ); ?></div><?php endif; ?>
-						<p><?php echo esc_html( wp_strip_all_tags( get_the_content() ) ); ?></p>
-					</div>
-				<?php $i++; endwhile; wp_reset_postdata();
-			else :
-				$ph = array(
-					array( 'AR', 'Aravind Raj R', 'Founder & Principal Engineer', 'Twelve years across infrastructure, cloud, and security. Believes in fewer meetings and clearer diagrams.' ),
-					array( 'PS', 'Priya Suresh',  'Head of Cloud Practice',       'AWS & Azure certified. Has led migrations for healthcare, fintech, and logistics clients across South India.' ),
-					array( 'VK', 'Vikram K.',     'Security & Compliance Lead',   'ISO 27001 lead auditor. Spends most days thinking about how to break things — so attackers can\'t.' ),
-				);
-				foreach ( $ph as $i => $p ) {
-					$delay = $i ? ' delay-' . $i : '';
-					printf( '<div class="team-card reveal%s"><div class="team-avatar">%s</div><h3>%s</h3><div class="role">%s</div><p>%s</p></div>',
-						$delay, esc_html( $p[0] ), esc_html( $p[1] ), esc_html( $p[2] ), esc_html( $p[3] ) );
-				}
-			endif;
-			?>
-		</div>
-	</div>
-</section>
-
 <?php syseze_cta_banner( 'Ready to work with a team that gets it?', 'Book a free IT audit — no strings, no sales pressure. Just a clear look at where you are and what\'s possible.', 'Book a Free IT Audit' ); ?>
 
 <?php get_footer(); ?>
