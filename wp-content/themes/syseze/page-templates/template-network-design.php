@@ -175,6 +175,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( ‘Build a network you can stop worrying about.’, ‘Start with a network assessment. We\’ll review your topology, traffic, and gaps in a single working session.’, ‘Book a Network Assessment’ ); ?>
+<?php syseze_cta_banner( "Build a network you can stop worrying about.", "Start with a network assessment. We'll review your topology, traffic, and gaps in a single working session.", "Book a Network Assessment" ); ?>
 
 <?php get_footer(); ?>

@@ -175,6 +175,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( ‘Ready to move to the cloud — or get more out of the one you\’re already on?’, ‘A free audit will surface your biggest cost and risk gaps in 30 minutes.’, ‘Book a Free Cloud Audit’ ); ?>
+<?php syseze_cta_banner( "Ready to move to the cloud — or get more out of the one you're already on?", "A free audit will surface your biggest cost and risk gaps in 30 minutes.", "Book a Free Cloud Audit" ); ?>
 
 <?php get_footer(); ?>

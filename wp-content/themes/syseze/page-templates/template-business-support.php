@@ -174,6 +174,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( ‘Get the support your business actually deserves.’, ‘Talk to our team. We\’ll scope a model that fits your real volume — not a worst-case retainer.’, ‘Talk to Our Support Team’ ); ?>
+<?php syseze_cta_banner( "Get the support your business actually deserves.", "Talk to our team. We'll scope a model that fits your real volume — not a worst-case retainer.", "Talk to Our Support Team" ); ?>
 
 <?php get_footer(); ?>

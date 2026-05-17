@@ -175,6 +175,6 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<?php syseze_cta_banner( ‘Ready to migrate without the drama?’, ‘Start with a migration assessment. We\’ll map the work, the risks, and the realistic timeline before you commit to anything.’, ‘Book a Migration Assessment’ ); ?>
+<?php syseze_cta_banner( "Ready to migrate without the drama?", "Start with a migration assessment. We'll map the work, the risks, and the realistic timeline before you commit to anything.", "Book a Migration Assessment" ); ?>
 
 <?php get_footer(); ?>
