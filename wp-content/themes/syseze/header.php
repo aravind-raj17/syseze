@@ -6,7 +6,7 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-$is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting', 'migration-services', 'network-design', 'cyber-security', 'business-support' ) );
+$is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting', 'migration-services', 'network-design', 'cyber-security', 'business-support', 'iam-services' ) );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -42,6 +42,7 @@ $is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting
 						<a href="<?php echo esc_url( syseze_page_url( 'network-design' ) ); ?>"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/></svg></span><span><span class="label">Network Design</span><span class="desc">Resilient, scalable topology</span></span></a>
 						<a href="<?php echo esc_url( syseze_page_url( 'cyber-security' ) ); ?>"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span><span class="label">Cyber Security</span><span class="desc">Threat protection &amp; compliance</span></span></a>
 						<a href="<?php echo esc_url( syseze_page_url( 'business-support' ) ); ?>"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><span><span class="label">Business Support</span><span class="desc">24/7 managed IT, pay-as-you-go</span></span></a>
+						<a href="<?php echo esc_url( syseze_page_url( 'iam-services' ) ); ?>"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span><span class="label">IAM Services</span><span class="desc">Identity, access &amp; Zero Trust</span></span></a>
 					</div>
 				</li>
 
@@ -68,6 +69,7 @@ $is_services_page = is_page( array( 'services', 'cloud-services', 'it-consulting
 			<a href="<?php echo esc_url( syseze_page_url( 'network-design' ) ); ?>">— Network Design</a>
 			<a href="<?php echo esc_url( syseze_page_url( 'cyber-security' ) ); ?>">— Cyber Security</a>
 			<a href="<?php echo esc_url( syseze_page_url( 'business-support' ) ); ?>">— Business Support</a>
+			<a href="<?php echo esc_url( syseze_page_url( 'iam-services' ) ); ?>">— IAM Services</a>
 		</div>
 		<a href="<?php echo esc_url( syseze_page_url( 'portfolio' ) ); ?>"><?php esc_html_e( 'Portfolio', 'syseze' ); ?></a>
 		<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'syseze' ); ?></a>

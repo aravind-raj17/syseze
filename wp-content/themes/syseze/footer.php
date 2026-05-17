@@ -37,6 +37,7 @@ $credit    = syseze_mod( 'syseze_footer_credit', 'Designed by Syseze.com' );
 						<li><a href="<?php echo esc_url( syseze_page_url( 'network-design' ) ); ?>">Network Design</a></li>
 						<li><a href="<?php echo esc_url( syseze_page_url( 'cyber-security' ) ); ?>">Cyber Security</a></li>
 						<li><a href="<?php echo esc_url( syseze_page_url( 'business-support' ) ); ?>">Business Support</a></li>
+						<li><a href="<?php echo esc_url( syseze_page_url( 'iam-services' ) ); ?>">IAM Services</a></li>
 					</ul>
 				<?php endif; ?>
 			</div>
