@@ -14,3 +14,4 @@ require_once get_template_directory() . '/inc/enqueue.php';
 require_once get_template_directory() . '/inc/cpt.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/template-helpers.php';
+require_once get_template_directory() . '/inc/contact-handler.php';

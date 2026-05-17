@@ -26,6 +26,11 @@ add_action( 'wp_enqueue_scripts', function () {
 	// Main JS.
 	wp_enqueue_script( 'syseze-main', get_template_directory_uri() . '/assets/js/main.js', array(), SYSEZE_VERSION, true );
 
+	wp_localize_script( 'syseze-main', 'sysezeAjax', array(
+		'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'syseze_contact_nonce' ),
+	) );
+
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}

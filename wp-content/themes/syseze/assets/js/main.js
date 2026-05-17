@@ -112,26 +112,48 @@
     });
   }
 
-  /* ---------- Contact form (client-side only) ---------- */
-  // TODO: wire to Formspree, Web3Forms, or Hostinger PHP mail handler before going live.
+  /* ---------- Contact form ---------- */
   const form = document.querySelector('#contact-form');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const status = document.querySelector('#form-status');
-      const data = Object.fromEntries(new FormData(form).entries());
-      if (!data.name || !data.email || !data.message) {
+      const data = new FormData(form);
+
+      if (!data.get('name') || !data.get('email') || !data.get('message')) {
         if (status) {
           status.textContent = 'Please fill in your name, email, and a short message.';
           status.className = 'form-status error';
         }
         return;
       }
-      if (status) {
-        status.textContent = "Thanks! We've received your message and will be in touch within one business day.";
-        status.className = 'form-status success';
+
+      const btn = form.querySelector('[type="submit"]');
+      if (btn) btn.disabled = true;
+      if (status) { status.textContent = 'Sending…'; status.className = 'form-status'; }
+
+      data.append('action', 'syseze_contact');
+      data.append('nonce', (typeof sysezeAjax !== 'undefined') ? sysezeAjax.nonce : '');
+
+      try {
+        const res  = await fetch((typeof sysezeAjax !== 'undefined') ? sysezeAjax.ajaxurl : '/wp-admin/admin-ajax.php', { method: 'POST', body: data });
+        const json = await res.json();
+        if (json.success) {
+          status.textContent = json.data;
+          status.className = 'form-status success';
+          form.reset();
+        } else {
+          status.textContent = json.data || 'Something went wrong. Please try again.';
+          status.className = 'form-status error';
+        }
+      } catch (_) {
+        if (status) {
+          status.textContent = 'Network error. Please email us at hello@syseze.com.';
+          status.className = 'form-status error';
+        }
+      } finally {
+        if (btn) btn.disabled = false;
       }
-      form.reset();
     });
   }
 })();
