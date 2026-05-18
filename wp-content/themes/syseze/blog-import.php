@@ -10,7 +10,7 @@ if ( ( $_GET['key'] ?? '' ) !== 'syseze_import_2026' ) {
 	die( 'Forbidden.' );
 }
 
-require_once '../../../../wp-load.php';
+require_once '../../../wp-load.php';
 
 if ( ! current_user_can( 'publish_posts' ) && ! defined( 'DOING_CRON' ) ) {
 	// Allow running even without being logged in, since key protects it.
