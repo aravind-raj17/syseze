@@ -22,7 +22,7 @@ $arrow = syseze_arrow();
 		?>
 		<?php if ( $cat_name ) : ?><span class="eyebrow reveal"><?php echo esc_html( $cat_name ); ?></span><?php endif; ?>
 		<h1 class="reveal delay-1"><?php the_title(); ?></h1>
-		<p class="lead reveal delay-2" style="margin:0 auto;"><?php echo esc_html( get_the_date() ); ?> · <?php echo esc_html( get_the_author() ); ?></p>
+		<p class="lead reveal delay-2" style="margin:0 auto;"><?php echo esc_html( get_the_date() ); ?></p>
 	</div>
 </section>
 
