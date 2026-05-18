@@ -2,7 +2,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Ticket, Message } from '@/types';
+import { Ticket, Message, TicketStatus } from '@/types';
+import { getSocket, disconnectSocket } from '@/lib/socket';
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   paid: { label: 'Waiting for payment confirmation', color: 'text-yellow-600 bg-yellow-50' },
@@ -11,6 +12,13 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   in_session: { label: 'Session in progress', color: 'text-green-600 bg-green-50' },
   awaiting_confirmation: { label: 'Please confirm resolution', color: 'text-purple-600 bg-purple-50' },
   resolved: { label: 'Session resolved', color: 'text-slate-600 bg-slate-100' },
+};
+
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+  ],
 };
 
 export default function CustomerSessionPage() {
@@ -25,6 +33,8 @@ export default function CustomerSessionPage() {
   const [screenError, setScreenError] = useState('');
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const screenStreamRef = useRef<MediaStream | null>(null);
 
   const loadTicket = useCallback(async () => {
     const res = await fetch(`/api/tickets/${id}`);
@@ -36,15 +46,90 @@ export default function CustomerSessionPage() {
     setLoading(false);
   }, [id]);
 
+  // Initial load + polling fallback (longer interval since socket handles live updates)
   useEffect(() => {
     loadTicket();
-    const interval = setInterval(loadTicket, 5000);
+    const interval = setInterval(loadTicket, 30000);
     return () => clearInterval(interval);
   }, [loadTicket]);
+
+  // Socket.IO setup
+  useEffect(() => {
+    const socket = getSocket();
+
+    socket.emit('join-room', id);
+
+    // Real-time status updates
+    socket.on('ticket:status', (newStatus: TicketStatus) => {
+      setTicket(prev => prev ? { ...prev, status: newStatus } : prev);
+    });
+
+    // Real-time chat messages
+    socket.on('chat:message', (msg: Message) => {
+      setMessages(prev => {
+        if (prev.find(m => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+    });
+
+    // Agent joined — re-emit offer if we already have a stream
+    socket.on('peer:joined', () => {
+      if (screenStreamRef.current) {
+        startWebRTCOffer(screenStreamRef.current);
+      }
+    });
+
+    return () => {
+      socket.off('ticket:status');
+      socket.off('chat:message');
+      socket.off('peer:joined');
+      socket.off('screen:answer');
+      socket.off('ice:candidate');
+      peerConnectionRef.current?.close();
+      peerConnectionRef.current = null;
+      disconnectSocket();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  async function startWebRTCOffer(stream: MediaStream) {
+    // Close any existing peer connection
+    peerConnectionRef.current?.close();
+
+    const socket = getSocket();
+    const pc = new RTCPeerConnection(ICE_SERVERS);
+    peerConnectionRef.current = pc;
+
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.emit('ice:candidate', { ticketId: id, candidate: event.candidate });
+      }
+    };
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    socket.emit('screen:offer', { ticketId: id, offer });
+
+    socket.off('screen:answer');
+    socket.on('screen:answer', async (answer: RTCSessionDescriptionInit) => {
+      if (pc.signalingState !== 'closed') {
+        await pc.setRemoteDescription(new RTCSessionDescription(answer));
+      }
+    });
+
+    socket.off('ice:candidate');
+    socket.on('ice:candidate', async (candidate: RTCIceCandidateInit) => {
+      if (pc.signalingState !== 'closed') {
+        await pc.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+    });
+  }
 
   async function startScreenShare() {
     setScreenError('');
@@ -54,12 +139,17 @@ export default function CustomerSessionPage() {
         audio: false,
       });
       setScreenStream(stream);
+      screenStreamRef.current = stream;
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
       stream.getVideoTracks()[0].addEventListener('ended', () => {
         setScreenStream(null);
+        screenStreamRef.current = null;
+        peerConnectionRef.current?.close();
+        peerConnectionRef.current = null;
       });
+      await startWebRTCOffer(stream);
     } catch (err: unknown) {
       if (err instanceof Error && err.name !== 'NotAllowedError') {
         setScreenError('Failed to start screen sharing. Please try again.');
@@ -72,6 +162,9 @@ export default function CustomerSessionPage() {
   function stopScreenShare() {
     screenStream?.getTracks().forEach(t => t.stop());
     setScreenStream(null);
+    screenStreamRef.current = null;
+    peerConnectionRef.current?.close();
+    peerConnectionRef.current = null;
   }
 
   async function sendMessage(e: React.FormEvent) {
@@ -87,6 +180,8 @@ export default function CustomerSessionPage() {
     if (res.ok) {
       const msg = await res.json();
       setMessages(prev => [...prev, msg]);
+      // Broadcast to agent via socket
+      getSocket().emit('chat:message', { ticketId: id, message: msg });
     }
   }
 
@@ -97,6 +192,7 @@ export default function CustomerSessionPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'resolved', customerConfirmedAt: new Date().toISOString() }),
     });
+    getSocket().emit('ticket:status', { ticketId: id, status: 'resolved' });
     await loadTicket();
     setConfirming(false);
   }
@@ -173,9 +269,8 @@ export default function CustomerSessionPage() {
                     {screenError && (
                       <div className="mb-4 p-3 bg-red-900/30 border border-red-700 rounded-lg text-red-300 text-sm">{screenError}</div>
                     )}
-                    {/* TODO: For real remote control (not just viewing), a native agent like RustDesk or AnyDesk is required.
-                         Browser WebRTC via getDisplayMedia() is view-only — it cannot send mouse/keyboard events.
-                         To implement true remote control: integrate a Rust/Electron desktop agent that exposes a WebSocket for control events. */}
+                    {/* NOTE: Browser WebRTC via getDisplayMedia() is view-only — it cannot send mouse/keyboard events.
+                         For true remote control: a native desktop agent (e.g. RustDesk/Electron) exposing WebSocket control events is required. */}
                     <button
                       onClick={startScreenShare}
                       className="px-6 py-3 bg-[#D97757] text-white font-medium rounded-lg hover:bg-[#c4673e] transition-colors"

@@ -3,7 +3,15 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Ticket, Message } from '@/types';
+import { Ticket, Message, TicketStatus } from '@/types';
+import { getSocket, disconnectSocket } from '@/lib/socket';
+
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+  ],
+};
 
 export default function AgentSessionPage() {
   const params = useParams<{ id: string }>();
@@ -17,7 +25,10 @@ export default function AgentSessionPage() {
   const [loading, setLoading] = useState(true);
   const [resolving, setResolving] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [hasRemoteStream, setHasRemoteStream] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/agent/login');
@@ -36,9 +47,74 @@ export default function AgentSessionPage() {
 
   useEffect(() => {
     loadTicket();
-    const interval = setInterval(loadTicket, 8000);
+    const interval = setInterval(loadTicket, 30000);
     return () => clearInterval(interval);
   }, [loadTicket]);
+
+  // Socket.IO + WebRTC setup
+  useEffect(() => {
+    const socket = getSocket();
+
+    socket.emit('join-room', id);
+
+    // Real-time status updates
+    socket.on('ticket:status', (newStatus: string) => {
+      setTicket(prev => prev ? { ...prev, status: newStatus as TicketStatus } : prev);
+    });
+
+    // Real-time chat messages
+    socket.on('chat:message', (msg: Message) => {
+      setMessages(prev => {
+        if (prev.find(m => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+    });
+
+    // WebRTC: receive screen offer from customer
+    socket.on('screen:offer', async (offer: RTCSessionDescriptionInit) => {
+      // Close any existing peer connection
+      peerConnectionRef.current?.close();
+
+      const pc = new RTCPeerConnection(ICE_SERVERS);
+      peerConnectionRef.current = pc;
+
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit('ice:candidate', { ticketId: id, candidate: event.candidate });
+        }
+      };
+
+      pc.ontrack = (event) => {
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = event.streams[0];
+          setHasRemoteStream(true);
+        }
+      };
+
+      await pc.setRemoteDescription(new RTCSessionDescription(offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      socket.emit('screen:answer', { ticketId: id, answer });
+    });
+
+    // ICE candidates from customer
+    socket.on('ice:candidate', async (candidate: RTCIceCandidateInit) => {
+      if (peerConnectionRef.current && peerConnectionRef.current.signalingState !== 'closed') {
+        await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+    });
+
+    return () => {
+      socket.off('ticket:status');
+      socket.off('chat:message');
+      socket.off('screen:offer');
+      socket.off('ice:candidate');
+      peerConnectionRef.current?.close();
+      peerConnectionRef.current = null;
+      disconnectSocket();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (!ticket?.sessionStartedAt) return;
@@ -58,6 +134,7 @@ export default function AgentSessionPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'in_session', sessionStartedAt: new Date().toISOString() }),
     });
+    getSocket().emit('ticket:status', { ticketId: id, status: 'in_session' });
     await loadTicket();
   }
 
@@ -72,6 +149,7 @@ export default function AgentSessionPage() {
         sessionNotes: notes,
       }),
     });
+    getSocket().emit('ticket:status', { ticketId: id, status: 'awaiting_confirmation' });
     await loadTicket();
     setResolving(false);
   }
@@ -97,6 +175,8 @@ export default function AgentSessionPage() {
     if (res.ok) {
       const msg: Message = await res.json();
       setMessages(prev => [...prev, msg]);
+      // Broadcast to customer via socket
+      getSocket().emit('chat:message', { ticketId: id, message: msg });
     }
   }
 
@@ -204,28 +284,31 @@ export default function AgentSessionPage() {
         </div>
 
         {/* Main: screen view area */}
-        <div className="flex-1 flex items-center justify-center bg-slate-900 p-6">
-          <div className="text-center max-w-md">
-            <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-2" />
-              </svg>
-            </div>
-            <h3 className="text-white font-medium mb-2">Waiting for customer&apos;s screen</h3>
-            <p className="text-slate-400 text-sm mb-4">The customer needs to click &ldquo;Start screen sharing&rdquo; on their end.</p>
-            {/* TODO: Implement WebRTC peer connection to receive customer's screen stream.
-                 Steps:
-                 1. Connect to Socket.IO room: socket.emit('join-room', ticketId)
-                 2. Wait for 'screen:offer' event from customer
-                 3. Create RTCPeerConnection, setRemoteDescription(offer)
-                 4. Create answer, setLocalDescription, emit 'screen:answer'
-                 5. Exchange ICE candidates via 'ice:candidate' events
-                 6. Display remote stream in <video> element
-                 Note: Browser WebRTC is view-only. True remote control requires a native desktop agent. */}
-            <div className="mt-4 p-3 bg-slate-800 rounded-lg text-left">
-              <p className="text-xs text-slate-500 font-medium mb-1">Status: {ticket.status.replace(/_/g, ' ')}</p>
-              <p className="text-xs text-slate-500">Screen sharing will appear here once the customer grants permission.</p>
-            </div>
+        <div className="flex-1 flex flex-col bg-slate-900 p-6">
+          <div className="flex-1 bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center relative">
+            {/* Remote video — hidden until stream arrives */}
+            <video
+              ref={remoteVideoRef}
+              autoPlay
+              className={`w-full h-full object-contain ${hasRemoteStream ? 'block' : 'hidden'}`}
+            />
+
+            {/* Placeholder shown until stream arrives */}
+            {!hasRemoteStream && (
+              <div className="text-center max-w-md">
+                <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-2" />
+                  </svg>
+                </div>
+                <h3 className="text-white font-medium mb-2">Waiting for customer&apos;s screen</h3>
+                <p className="text-slate-400 text-sm mb-4">The customer needs to click &ldquo;Start screen sharing&rdquo; on their end.</p>
+                <div className="mt-4 p-3 bg-slate-700 rounded-lg text-left">
+                  <p className="text-xs text-slate-500 font-medium mb-1">Status: {ticket.status.replace(/_/g, ' ')}</p>
+                  <p className="text-xs text-slate-500">Screen sharing will appear here once the customer grants permission.</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

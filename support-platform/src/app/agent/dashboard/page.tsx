@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Ticket } from '@/types';
+import { getSocket, disconnectSocket } from '@/lib/socket';
 
 const STATUS_COLORS: Record<string, string> = {
   queued: 'bg-blue-100 text-blue-700',
@@ -38,8 +39,23 @@ export default function AgentDashboardPage() {
 
   useEffect(() => {
     loadTickets();
-    const interval = setInterval(loadTickets, 10000);
+    const interval = setInterval(loadTickets, 30000);
     return () => clearInterval(interval);
+  }, [loadTickets]);
+
+  // Socket.IO: listen for ticket status changes across all rooms to refresh queue
+  useEffect(() => {
+    const socket = getSocket();
+
+    // Join a special dashboard room to receive broadcasts
+    socket.on('ticket:status', () => {
+      loadTickets();
+    });
+
+    return () => {
+      socket.off('ticket:status');
+      disconnectSocket();
+    };
   }, [loadTickets]);
 
   async function acceptTicket(ticketId: string) {
@@ -50,6 +66,7 @@ export default function AgentDashboardPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'assigned', agentId }),
     });
+    getSocket().emit('ticket:status', { ticketId, status: 'assigned' });
     router.push(`/agent/session/${ticketId}`);
   }
 
