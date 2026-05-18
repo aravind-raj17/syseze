@@ -78,9 +78,6 @@ function syseze_seed_blog_posts() {
 <p>I'd sequence the habits before the architecture. Spend the first quarter on credential lifecycle and audit-log discipline. Force every team to feel the friction of doing the right thing manually. Then — and only then — buy the tooling that smooths the friction, because by that point your engineers will know exactly which friction to smooth and which to keep.</p>
 <p>The vendors will tell you their platform is Zero Trust. It is not. It is a substrate on which Zero Trust can be practiced by people who already wanted to practice it. The platform without the practice is a CAPEX line item with a dashboard. The practice without the platform is exhausting but real. With both, you have something worth the budget.</p>
 <p>The auditor still doesn't ask about blast radius. But the last time we had a credential exposed in a public repo, the credential was four hours old, scoped to one read, and had been rotated out before the bot that scraped GitHub finished indexing the commit. That's the posture. The architecture just helped us scale it.</p>
-  <div class="uplink-byline">
-    <div><span class="name">Priya Anand</span> — Principal Security Engineer</div>
-  </div>
 </article>
 HTML;
 
@@ -147,9 +144,6 @@ HTML;
 <h2>After</h2>
 <p>Wave four cut over on April 23rd. The last machine in the old data center was decommissioned on April 28th, two days before the deadline. The team took the long weekend off, which was the first long weekend any of us had taken since January. The improvement work — the deferred containerization, the sharding, the event-driven cleanups — started in earnest in May and will run for most of this year. We are doing it slowly, with proper design reviews, with no regulator in the room. It is much more pleasant work.</p>
 <p>The migration was the hardest thing this team has done together. It is also, by a comfortable margin, the most proud I have ever been of a group of engineers. Ninety days. Three rules. One whiteboard. The substrate matters less than people will tell you. The discipline matters more.</p>
-  <div class="uplink-byline">
-    <div><span class="name">Dana Okafor</span> — Director of Platform Engineering</div>
-  </div>
 </article>
 HTML;
 
@@ -210,9 +204,6 @@ HTML;
 <h2>The team</h2>
 <p>The thing I was most worried about — that the humans would feel demoted, or replaceable, or bored — has not happened. The work that is left is interesting in a way the work before was not. We have built two internal tools in the last quarter that we would never have had time to build before. One of them, an onboarding orchestrator for new hires, has already saved more time than the agent does. The agent gave the team time to be the kind of IT shop they always said they wanted to be: one that builds things, not one that resets passwords.</p>
 <p>Renee, for what it's worth, no longer files tickets about Outlook. She did file one last week about a strange networking issue at a co-working space in Berlin. The agent took one look and routed it to a human with the note: "Out of scope. Recommend a human conversation; user's location and corporate VPN policy interact in ways I am not confident about." That ticket took us a real forty minutes to resolve. It was a good forty minutes.</p>
-  <div class="uplink-byline">
-    <div><span class="name">Marcus Lee</span> — Head of IT Operations</div>
-  </div>
 </article>
 HTML;
 
@@ -308,3 +299,29 @@ function syseze_update_blog_covers() {
 	update_option( 'syseze_blog_covers_local_v1', '1' );
 }
 add_action( 'init', 'syseze_update_blog_covers', 100 );
+
+/* ─── one-time update: strip byline divs from existing post content ─── */
+function syseze_remove_blog_bylines() {
+	if ( get_option( 'syseze_blog_no_byline_v1' ) ) {
+		return;
+	}
+	$slugs = [
+		'zero-trust-isnt-a-product',
+		'migrating-12000-vms-in-90-days',
+		'helpdesk-that-closes-its-own-tickets',
+	];
+	foreach ( $slugs as $slug ) {
+		$post = get_page_by_path( $slug, OBJECT, 'post' );
+		if ( ! $post ) {
+			continue;
+		}
+		$content = preg_replace(
+			'/<div\s+class="uplink-byline">[\s\S]*?<\/div>\s*<\/div>/i',
+			'',
+			$post->post_content
+		);
+		wp_update_post( [ 'ID' => $post->ID, 'post_content' => $content ] );
+	}
+	update_option( 'syseze_blog_no_byline_v1', '1' );
+}
+add_action( 'init', 'syseze_remove_blog_bylines', 101 );
