@@ -7,7 +7,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'SYSEZE_VERSION', '1.2.0' );
+define( 'SYSEZE_VERSION', '1.2.1' );
 
 require_once get_template_directory() . '/inc/setup.php';
 require_once get_template_directory() . '/inc/enqueue.php';
