@@ -283,3 +283,28 @@ HTML;
 	update_option( 'syseze_blog_seeded_v1', '1' );
 }
 add_action( 'init', 'syseze_seed_blog_posts', 99 );
+
+/* ─── one-time update: point cover meta to local theme images ─── */
+function syseze_update_blog_covers() {
+	if ( get_option( 'syseze_blog_covers_local_v1' ) ) {
+		return;
+	}
+
+	$map = [
+		'zero-trust-isnt-a-product'            => 'zero-trust-isnt-a-product.jpg',
+		'migrating-12000-vms-in-90-days'       => 'migrating-12000-vms-in-90-days.jpg',
+		'helpdesk-that-closes-its-own-tickets' => 'helpdesk-that-closes-its-own-tickets.jpg',
+	];
+
+	$base = get_template_directory_uri() . '/assets/images/blog/';
+
+	foreach ( $map as $slug => $file ) {
+		$post = get_page_by_path( $slug, OBJECT, 'post' );
+		if ( $post ) {
+			update_post_meta( $post->ID, '_syseze_cover_url', $base . $file );
+		}
+	}
+
+	update_option( 'syseze_blog_covers_local_v1', '1' );
+}
+add_action( 'init', 'syseze_update_blog_covers', 100 );
