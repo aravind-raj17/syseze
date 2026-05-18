@@ -46,9 +46,13 @@ $q = new WP_Query( array(
 							<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 32, '…' ) ); ?></p>
 							<a href="<?php the_permalink(); ?>" class="btn-link">Read the full piece <?php echo $arrow; ?></a>
 						</div>
-						<div class="thumb">
-							<?php if ( has_post_thumbnail() ) : ?>
-								<?php the_post_thumbnail( 'syseze-featured', array( 'style' => 'width:100%;height:100%;object-fit:cover;border-radius:var(--radius);' ) ); ?>
+						<div class="thumb" style="overflow:hidden;">
+							<?php
+							$_cover = get_post_meta( get_the_ID(), '_syseze_cover_url', true );
+							if ( has_post_thumbnail() ) :
+								the_post_thumbnail( 'syseze-featured', array( 'style' => 'width:100%;height:100%;object-fit:cover;border-radius:var(--radius);' ) );
+							elseif ( $_cover ) : ?>
+								<img src="<?php echo esc_url( $_cover ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius);" />
 							<?php else : ?>
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
 							<?php endif; ?>
@@ -61,8 +65,12 @@ $q = new WP_Query( array(
 					<article class="portfolio-card reveal<?php echo esc_attr( $delay ); ?>">
 						<div class="portfolio-thumb">
 							<span class="tag"><?php echo esc_html( $cat_name ); ?></span>
-							<?php if ( has_post_thumbnail() ) : ?>
-								<?php the_post_thumbnail( 'syseze-card', array( 'style' => 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;' ) ); ?>
+							<?php
+							$_cover = get_post_meta( get_the_ID(), '_syseze_cover_url', true );
+							if ( has_post_thumbnail() ) :
+								the_post_thumbnail( 'syseze-card', array( 'style' => 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;' ) );
+							elseif ( $_cover ) : ?>
+								<img src="<?php echo esc_url( $_cover ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" />
 							<?php else : ?>
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
 							<?php endif; ?>

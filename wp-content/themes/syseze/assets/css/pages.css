@@ -527,6 +527,20 @@
 .portfolio-body h3 { font-size: 1.1rem; margin-bottom: 10px; }
 .portfolio-body p { font-size: 0.92rem; margin-bottom: 16px; flex: 1; }
 
+/* Single post light card */
+.single-post-wrap {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.single-post-wrap .uplink-post {
+  padding: 48px 40px;
+}
+@media (max-width: 640px) {
+  .single-post-wrap .uplink-post { padding: 28px 20px; }
+}
+
 /* Blog */
 .blog-featured {
   display: grid;

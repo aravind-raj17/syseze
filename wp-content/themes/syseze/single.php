@@ -28,15 +28,9 @@ $arrow = syseze_arrow();
 
 <section class="section-tight">
 	<div class="container" style="max-width:820px;">
-		<?php if ( has_post_thumbnail() ) : ?>
-			<div class="reveal" style="border-radius:var(--radius-lg);overflow:hidden;margin-bottom:48px;border:1px solid var(--border);">
-				<?php the_post_thumbnail( 'syseze-featured', array( 'style' => 'width:100%;height:auto;display:block;' ) ); ?>
-			</div>
-		<?php endif; ?>
-
-		<article class="reveal post-content" style="color:var(--text); font-size:1.05rem; line-height:1.8;">
+		<div class="reveal single-post-wrap">
 			<?php the_content(); ?>
-		</article>
+		</div>
 
 		<div style="margin-top:48px; padding-top:32px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
 			<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ?: home_url( '/blog/' ) ); ?>" class="btn-link" style="transform:scaleX(-1);">
