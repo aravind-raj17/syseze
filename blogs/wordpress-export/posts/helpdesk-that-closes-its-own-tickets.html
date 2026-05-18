@@ -1,0 +1,80 @@
+<!--
+==========================================================================
+WordPress paste file — "The helpdesk that closes its own tickets."
+==========================================================================
+
+HOW TO USE
+1. In WordPress, create a New Post.
+2. Set the Title to:   The helpdesk that closes its own tickets.
+3. Set the Category to: Automation
+4. Set the Featured Image to:  images/helpdesk-that-closes-its-own-tickets.jpg
+   (Upload it via Media → Add New → Select File)
+5. Switch the editor to CODE view (top-right ⋮ menu → "Code editor"),
+   then paste EVERYTHING below the marker line into the editor.
+6. Switch back to Visual editor and Publish.
+
+Author: Marcus Lee (Head of IT Operations)
+Suggested publish date: May 7, 2026
+==========================================================================
+PASTE EVERYTHING BELOW THIS LINE
+========================================================================== -->
+
+<style>
+.uplink-post{font-family:Georgia,serif;color:#1a1714;max-width:760px;margin:0 auto;line-height:1.65;font-size:18px;}
+.uplink-post .uplink-meta{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7a6f63;font-weight:600;margin-bottom:16px;}
+.uplink-post .uplink-meta .tag{color:#b8451e;}
+.uplink-post .uplink-dek{font-size:22px;line-height:1.4;color:#3d3631;font-style:italic;margin:0 0 28px;}
+.uplink-post figure.uplink-hero{margin:0 0 36px;}
+.uplink-post figure.uplink-hero img{width:100%;height:auto;display:block;}
+.uplink-post figure.uplink-hero figcaption{font-size:14px;color:#7a6f63;font-style:italic;text-align:center;margin-top:10px;}
+.uplink-post h2{font-family:Georgia,serif;font-weight:400;font-size:32px;line-height:1.1;margin:2em 0 .5em;letter-spacing:-.02em;}
+.uplink-post h2 em{color:#b8451e;font-style:italic;}
+.uplink-post h3{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#7a6f63;margin:2em 0 .4em;font-weight:600;}
+.uplink-post p{margin:0 0 1.2em;}
+.uplink-post ul{padding-left:1.4em;margin:1.2em 0;}
+.uplink-post ul li{margin-bottom:.5em;}
+.uplink-post ul li::marker{color:#b8451e;}
+.uplink-post blockquote.uplink-pq{margin:2em 0;padding:0 0 0 24px;border-left:3px solid #b8451e;font-family:Georgia,serif;font-style:italic;font-size:26px;line-height:1.25;color:#1a1714;}
+.uplink-post blockquote.uplink-pq footer{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-style:normal;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7a6f63;margin-top:14px;font-weight:600;}
+.uplink-post aside.uplink-callout{background:#faf6ee;border:1px solid rgba(0,0,0,.08);border-left:3px solid #b8451e;padding:24px 28px;margin:2em 0;}
+.uplink-post aside.uplink-callout h4{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#b8451e;margin:0 0 12px;font-weight:700;}
+.uplink-post aside.uplink-callout ul{margin:0;padding-left:1.2em;}
+.uplink-post aside.uplink-callout li{font-size:16px;margin-bottom:8px;}
+.uplink-post .uplink-stats{display:flex;gap:0;border-top:1px solid rgba(0,0,0,.14);border-bottom:1px solid rgba(0,0,0,.14);padding:24px 0;margin:2.4em 0;text-align:center;}
+.uplink-post .uplink-stats .stat{flex:1;padding:0 12px;border-right:1px solid rgba(0,0,0,.08);}
+.uplink-post .uplink-stats .stat:last-child{border-right:none;}
+.uplink-post .uplink-stats .num{font-family:Georgia,serif;font-size:48px;line-height:1;color:#b8451e;letter-spacing:-.02em;}
+.uplink-post .uplink-stats .label{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7a6f63;margin-top:8px;font-weight:600;}
+.uplink-post .uplink-byline{display:flex;align-items:center;gap:12px;margin:32px 0 0;padding-top:24px;border-top:1px solid rgba(0,0,0,.08);font-size:14px;color:#7a6f63;}
+.uplink-post .uplink-byline .name{color:#1a1714;font-weight:600;}
+@media (max-width:600px){.uplink-post .uplink-stats{flex-direction:column;gap:18px;}.uplink-post .uplink-stats .stat{border-right:none;border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:18px;}.uplink-post .uplink-stats .stat:last-child{border-bottom:none;padding-bottom:0;}}
+</style>
+<article class="uplink-post">
+  <div class="uplink-meta"><span class="tag">Automation</span> · 7 min read · May 7, 2026</div>
+  <p class="uplink-dek">We pointed an LLM at our ticketing system expecting a chatbot. We got something stranger: a tier-one analyst that never sleeps, never escalates the wrong thing, and finally let our humans do interesting work.</p>
+  <figure class="uplink-hero">
+    <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1600&q=80" alt="The helpdesk that closes its own tickets." />
+    <figcaption>The team's new daily standup spends more time discussing what the agent shouldn't do than what it should.</figcaption>
+  </figure>
+  <p>On a Tuesday in January, a junior accountant named Renée filed ticket #44912: "Outlook keeps asking for my password." By the time the human on shift opened the queue at 8:47 a.m., the ticket was closed. The resolution note said the user's MFA token had drifted, a fresh one had been issued, the offending cached credential had been cleared from her keychain, and she had been emailed a two-line explanation with a screenshot. Renée had already replied: thanks.</p>
+<p>Our humans had not touched it. None of us realized for about forty minutes.</p>
+<h2>The before</h2>
+<p>Our IT desk was eight people supporting fourteen hundred. The queue had a steady-state size of roughly two hundred open tickets and a long tail of three- and four-day-olds that nobody loved. Median time-to-first-response was thirty-eight minutes during the day and four hours overnight. About 70% of inbound was, by volume, the same nine problems — password resets, MFA drift, VPN config, printer queues, Slack permissions, license assignments, calendar sync, the eternal Outlook profile rebuild, and a remarkable number of "my microphone doesn't work" tickets that turned out, every time, to be the operating system's privacy toggle.</p>
+<div class="uplink-stats"><div class="stat"><div class="num">63%</div><div class="label">Tickets now closed without human touch</div></div><div class="stat"><div class="num">9 min</div><div class="label">Median time-to-resolution, all tickets</div></div><div class="stat"><div class="num">0</div><div class="label">Layoffs from automation</div></div></div>
+<h2>What we actually built</h2>
+<p>Not a chatbot. The thing that has worked, surprisingly well, is an agent that reads incoming tickets, decides whether it can resolve them, and either resolves them end-to-end or hands them to a human with a structured summary and its best guess. The difference is small in description and enormous in practice.</p>
+<p>When a ticket comes in, the agent does roughly this:</p>
+<ul><li>Reads the ticket and any prior history from the same user.</li><li>Checks the user's current state against the obvious telemetry sources — identity provider, MDM, the relevant SaaS audit logs.</li><li>Forms a hypothesis. Writes the hypothesis down, in plain English, in a hidden field on the ticket.</li><li>If the hypothesis matches a class of problem we've explicitly authorized it to fix, it runs the fix and tells the user what it did.</li><li>If not, it leaves the hypothesis and a recommended next step on the ticket and routes it to a human.</li></ul>
+<blockquote class="uplink-pq">The agent's job isn't to be right. It's to make the human's first thirty seconds on the ticket count.<footer>— From our internal runbook</footer></blockquote>
+<p>That last point is the part nobody talks about, and it has done as much for our team morale as the automation itself. When a human picks up a ticket now, they don't start from a one-line user complaint. They start from: "User reports Outlook prompting for password. Last successful auth was 14 hours ago. MFA token last rotated 19 days ago, which is unusual; the user's cohort rotates every 7. Recommended action: force token rotation, expect resolution. Did not auto-resolve because user has elevated mailbox delegation and our policy requires human confirmation for credential changes on delegated accounts." The human can confirm or reject in fifteen seconds. They spend the rest of the hour on the genuinely strange tickets.</p>
+<h2>What we won't let it touch</h2>
+<p>We were strict about the kill switches from day one. None of these are technical limitations — the agent could do all of them — but we decided they belonged to humans and we have not regretted that decision.</p>
+<aside class="uplink-callout"><h4>The agent's deny-list</h4><ul><li>Anything that modifies access for an executive or their delegates.</li><li>Anything involving customer data, even read-only.</li><li>Anything that creates, deletes, or modifies a license seat. (Procurement-adjacent.)</li><li>Anything where the user has filed more than two tickets in the same week — that's a human's job to notice the pattern.</li><li>Anything tagged 'urgent' by the user. The agent triages and summarizes; a human decides.</li></ul></aside>
+<p>The deny-list is longer than we expected to need. It is also the only reason senior leadership signed off on letting the agent take action at all. Every quarter we review the list and, in practice, we have added items more often than we have removed them. The agent's footprint expands by removing entries from a deny-list, not by adding entries to an allow-list. This sounds like the same thing. It is not.</p>
+<h2>The team</h2>
+<p>The thing I was most worried about — that the humans would feel demoted, or replaceable, or bored — has not happened. The work that is left is interesting in a way the work before was not. We have built two internal tools in the last quarter that we would never have had time to build before. One of them, an onboarding orchestrator for new hires, has already saved more time than the agent does. The agent gave the team time to be the kind of IT shop they always said they wanted to be: one that builds things, not one that resets passwords.</p>
+<p>Renée, for what it's worth, no longer files tickets about Outlook. She did file one last week about a strange networking issue at a co-working space in Berlin. The agent took one look and routed it to a human with the note: "Out of scope. Recommend a human conversation; user's location and corporate VPN policy interact in ways I am not confident about." That ticket took us a real forty minutes to resolve. It was a good forty minutes.</p>
+  <div class="uplink-byline">
+    <div><span class="name">Marcus Lee</span> — Head of IT Operations</div>
+  </div>
+</article>
