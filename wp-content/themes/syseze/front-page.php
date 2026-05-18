@@ -58,10 +58,7 @@ $arrow = syseze_arrow();
 		<div class="trust reveal delay-4">
 			<div class="trust-label"><?php esc_html_e( 'Trusted by businesses across India', 'syseze' ); ?></div>
 			<div class="trust-logos">
-				<!--
-				  Drop real logos as PNGs at: wp-content/themes/syseze/assets/images/clients/{slug}.png
-				  (transparent bg, ~200px tall). If a file is missing, the text wordmark stays visible.
-				-->
+				<div class="trust-track">
 				<?php
 				$clients = array(
 					array( 'cmart-solutions',  'CMart Solutions',  'https://cmartsolutions.com/',    'png' ),
@@ -70,7 +67,9 @@ $arrow = syseze_arrow();
 					array( 'justo-global',     'Justo Global',     'https://justoglobal.com/',        'png' ),
 					array( 'cynlr',            'CynLr',            'https://www.cynlr.com/',          'svg' ),
 				);
-				foreach ( $clients as $c ) {
+				/* output twice for seamless infinite loop */
+				$all = array_merge( $clients, $clients );
+				foreach ( $all as $c ) {
 					$img_url = get_template_directory_uri() . '/assets/images/clients/' . $c[0] . '.' . $c[3];
 					printf(
 						'<a class="tl" href="%1$s" target="_blank" rel="noopener" aria-label="%2$s"><img src="%3$s" alt="%2$s" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'inline-flex\';" /><span class="tl-text" style="display:none;"><span class="mark"></span>%2$s</span></a>',
@@ -80,6 +79,7 @@ $arrow = syseze_arrow();
 					);
 				}
 				?>
+				</div>
 			</div>
 		</div>
 	</div>
