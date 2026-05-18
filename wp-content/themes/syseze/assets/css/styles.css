@@ -554,7 +554,6 @@ p { margin: 0 0 1em; color: var(--text-muted); text-wrap: pretty; }
   justify-content: center;
   align-items: center;
   gap: 48px;
-  opacity: 0.7;
 }
 .trust-logos .tl {
   font-family: var(--font-display);
@@ -567,20 +566,20 @@ p { margin: 0 0 1em; color: var(--text-muted); text-wrap: pretty; }
   gap: 8px;
   transition: color .2s ease, opacity .2s ease, filter .2s ease;
   text-decoration: none;
+  opacity: 0.55;
 }
 .trust-logos .tl:hover { color: var(--text); opacity: 1; }
 .trust-logos .tl .tl-text { display: inline-flex; align-items: center; gap: 8px; }
 .trust-logos .tl img {
-  height: 36px;
+  height: 40px;
   width: auto;
-  max-width: 180px;
+  max-width: 160px;
   object-fit: contain;
-  filter: grayscale(1) brightness(1.3) contrast(0.9);
-  opacity: 0.75;
+  filter: brightness(0) invert(1);
   transition: filter .25s ease, opacity .25s ease;
 }
 .trust-logos .tl:hover img {
-  filter: grayscale(0) brightness(1) contrast(1);
+  filter: brightness(0) invert(1);
   opacity: 1;
 }
 .trust-logos .tl .mark {
