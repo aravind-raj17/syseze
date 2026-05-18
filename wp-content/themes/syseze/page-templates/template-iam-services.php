@@ -90,7 +90,7 @@ $arrow = syseze_arrow();
 	</div>
 </section>
 
-<section class="section" style="background:linear-gradient(180deg, transparent, rgba(17,24,39,0.4) 50%, transparent);">
+<section class="section">
 	<div class="container">
 		<div class="section-head reveal">
 			<span class="eyebrow">NetIQ IAM Solutions</span>

@@ -115,7 +115,7 @@ $arrow = syseze_arrow();
 		<div class="section-head reveal">
 			<span class="eyebrow"><?php esc_html_e( 'What we do', 'syseze' ); ?></span>
 			<h2><?php esc_html_e( 'Services that scale with you', 'syseze' ); ?></h2>
-			<p><?php esc_html_e( 'Six tightly-scoped practices, one accountable partner. From a single cloud workload to a full-stack transformation, we meet you where you are.', 'syseze' ); ?></p>
+			<p><?php esc_html_e( 'Seven tightly-scoped practices, one accountable partner. From a single cloud workload to a full-stack transformation, we meet you where you are.', 'syseze' ); ?></p>
 		</div>
 
 		<div class="card-grid">
@@ -127,6 +127,7 @@ $arrow = syseze_arrow();
 				array( 'network-design',      'Network Design',     'Future-proof network architecture — segmented, observable, and ready for the bandwidth you\'ll need next year.', '<circle cx="12" cy="12" r="3"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/><line x1="6" y1="6" x2="10" y2="10"/><line x1="18" y1="6" x2="14" y2="10"/><line x1="6" y1="18" x2="10" y2="14"/><line x1="18" y1="18" x2="14" y2="14"/>' ),
 				array( 'cyber-security',      'Cyber Security',     'End-to-end threat protection, compliance hardening, and incident response — without the enterprise overhead.', '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' ),
 				array( 'business-support',    'Business Support',   '24/7 managed IT support on a pay-as-you-go model. Real engineers, real fixes, no bloated retainers.', '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>' ),
+				array( 'iam-services',         'IAM Services',       'Identity and access management built on Zero Trust — SSO, MFA, privileged access, and full lifecycle automation.', '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>' ),
 			);
 			foreach ( $svcs as $i => $svc ) {
 				$delay = $i ? ' delay-' . $i : '';

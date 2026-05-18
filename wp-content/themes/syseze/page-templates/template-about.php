@@ -170,7 +170,7 @@ $arrow = syseze_arrow();
 <section class="stats-section">
 	<div class="container">
 		<div class="section-head reveal" style="margin-bottom:40px;">
-			<h2><?php esc_html_e( 'Six years. A lot of work behind us.', 'syseze' ); ?></h2>
+			<h2><?php printf( esc_html__( '%s years in business. A lot of work behind us.', 'syseze' ), esc_html( syseze_mod( 'syseze_stat_years', '6+' ) ) ); ?></h2>
 		</div>
 		<div class="stats">
 			<?php
