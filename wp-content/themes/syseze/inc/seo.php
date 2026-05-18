@@ -350,7 +350,55 @@ add_action( 'wp_head', function () {
 }, 5 );
 
 /* ═══════════════════════════════════════════════════════════
-   6. ROBOTS — noindex on search/404
+   6. CUSTOM XML SITEMAP  →  /sitemap.xml
+   ═══════════════════════════════════════════════════════════ */
+
+function syseze_sitemap_url( $loc, $lastmod = '', $changefreq = 'monthly', $priority = '0.8' ) {
+	$out  = "  <url>\n";
+	$out .= '    <loc>' . esc_url( $loc ) . "</loc>\n";
+	if ( $lastmod ) {
+		$out .= '    <lastmod>' . esc_html( $lastmod ) . "</lastmod>\n";
+	}
+	$out .= '    <changefreq>' . esc_html( $changefreq ) . "</changefreq>\n";
+	$out .= '    <priority>' . esc_html( $priority ) . "</priority>\n";
+	$out .= "  </url>\n";
+	return $out;
+}
+
+add_action( 'template_redirect', function () {
+	$uri = isset( $_SERVER['REQUEST_URI'] ) ? strtok( $_SERVER['REQUEST_URI'], '?' ) : '';
+	if ( $uri !== '/sitemap.xml' ) {
+		return;
+	}
+
+	$pages = get_pages( [ 'post_status' => 'publish' ] );
+	$posts = get_posts( [ 'post_type' => 'post', 'post_status' => 'publish', 'numberposts' => -1 ] );
+
+	header( 'Content-Type: application/xml; charset=utf-8' );
+	header( 'X-Robots-Tag: noindex' );
+
+	echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+	echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+	echo syseze_sitemap_url( home_url( '/' ), gmdate( 'c' ), 'weekly', '1.0' );
+
+	$high_priority = [ 'services', 'iam-services', 'cloud-services', 'it-consulting', 'migration-services', 'network-design', 'cyber-security', 'business-support' ];
+
+	foreach ( $pages as $page ) {
+		$priority = in_array( $page->post_name, $high_priority, true ) ? '0.9' : '0.8';
+		echo syseze_sitemap_url( get_permalink( $page->ID ), get_the_modified_date( 'c', $page->ID ), 'monthly', $priority );
+	}
+
+	foreach ( $posts as $post ) {
+		echo syseze_sitemap_url( get_permalink( $post->ID ), get_the_modified_date( 'c', $post->ID ), 'monthly', '0.7' );
+	}
+
+	echo '</urlset>';
+	exit;
+}, 1 );
+
+/* ═══════════════════════════════════════════════════════════
+   7. ROBOTS — noindex on search/404
    ═══════════════════════════════════════════════════════════ */
 
 add_action( 'wp_head', function () {
