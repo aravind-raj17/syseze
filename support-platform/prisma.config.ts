@@ -1,9 +1,10 @@
-import { defineConfig } from '@prisma/config';
-import path from 'node:path';
+import path from 'path';
+import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
+  earlyAccess: true,
   schema: path.join('prisma', 'schema.prisma'),
   datasource: {
-    url: process.env.DATABASE_URL ?? 'file:./dev.db',
+    url: process.env.DATABASE_URL ?? 'postgresql://localhost:5432/support_platform',
   },
 });

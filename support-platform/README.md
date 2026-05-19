@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deploy to Railway
+
+1. Create account at railway.app
+2. New Project → Deploy from GitHub repo
+3. Add PostgreSQL plugin (free)
+4. Set environment variables:
+   - DATABASE_URL: auto-set by Railway PostgreSQL plugin
+   - NEXTAUTH_SECRET: any random string (use: openssl rand -base64 32)
+   - NEXTAUTH_URL: your Railway app URL (e.g. https://app-name.railway.app)
+   - NEXT_PUBLIC_APP_URL: same as NEXTAUTH_URL
+5. Railway auto-deploys on git push
+6. After first deploy, run seed: railway run npm run db:seed
