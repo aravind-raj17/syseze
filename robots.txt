@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /wp-includes/
+Disallow: /xmlrpc.php
+Disallow: /?s=
+Disallow: /search/
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://syseze.com/sitemap.xml

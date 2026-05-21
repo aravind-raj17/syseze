@@ -287,8 +287,9 @@ add_action( 'wp_head', function () {
 			'datePublished'    => get_the_date( 'c', $post->ID ),
 			'dateModified'     => get_the_modified_date( 'c', $post->ID ),
 			'author'           => [
-				'@type' => 'Person',
-				'name'  => get_the_author_meta( 'display_name', $post->post_author ),
+				'@type' => 'Organization',
+				'name'  => 'SysEze Tech',
+				'url'   => home_url( '/' ),
 			],
 			'publisher'        => [ '@id' => $site_url . '#organization' ],
 			'url'              => get_permalink( $post->ID ),
