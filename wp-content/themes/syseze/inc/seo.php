@@ -193,9 +193,15 @@ add_action( 'wp_head', function () {
 			'url'   => esc_url( syseze_logo_url() ),
 		],
 		'description' => 'Enterprise IT services company specialising in Identity & Access Management, cloud migration, cyber security and managed IT support across India and globally.',
+		'telephone'   => '+91 9019435799',
+		'email'       => 'hello@syseze.com',
 		'areaServed'  => [ 'India', 'Global' ],
+		'sameAs'      => [
+			'https://www.linkedin.com/company/syseze/',
+		],
 		'contactPoint' => [
 			'@type'       => 'ContactPoint',
+			'telephone'   => '+91 9019435799',
 			'email'       => 'hello@syseze.com',
 			'contactType' => 'customer service',
 			'areaServed'  => 'IN',
