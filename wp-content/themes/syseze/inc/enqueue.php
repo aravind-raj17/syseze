@@ -7,6 +7,20 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+/* ── Google Analytics 4 ── */
+add_action( 'wp_head', function () {
+	?>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SSJ2C8GTQ3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SSJ2C8GTQ3');
+</script>
+	<?php
+}, 1 );
+
 add_action( 'wp_enqueue_scripts', function () {
 	// Google fonts — preconnect handled by WP automatically when enqueued as a stylesheet.
 	wp_enqueue_style(
