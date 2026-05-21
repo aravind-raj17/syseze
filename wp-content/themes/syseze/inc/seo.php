@@ -195,6 +195,14 @@ add_action( 'wp_head', function () {
 		'description' => 'Enterprise IT services company specialising in Identity & Access Management, cloud migration, cyber security and managed IT support across India and globally.',
 		'telephone'   => '+91 9019435799',
 		'email'       => 'hello@syseze.com',
+		'address'     => [
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => 'No 32, Keshava Krupa, 3rd Cross, Anekal Road',
+			'addressLocality' => 'Chandapura, Bangalore',
+			'postalCode'      => '560099',
+			'addressRegion'   => 'Karnataka',
+			'addressCountry'  => 'IN',
+		],
 		'areaServed'  => [ 'India', 'Global' ],
 		'sameAs'      => [
 			'https://www.linkedin.com/company/syseze/',
@@ -263,6 +271,37 @@ add_action( 'wp_head', function () {
 			'keywords'    => 'managed IT support India, 24/7 IT support, business IT services, managed services',
 		],
 	];
+
+	/* ── LocalBusiness (contact page) ── */
+	if ( is_page( 'contact' ) ) {
+		$schemas[] = [
+			'@context'   => 'https://schema.org',
+			'@type'      => 'LocalBusiness',
+			'@id'        => $site_url . '#localbusiness',
+			'name'       => 'SysEze Tech Pvt Ltd',
+			'url'        => $site_url,
+			'telephone'  => '+91 9019435799',
+			'email'      => 'hello@syseze.com',
+			'image'      => esc_url( syseze_logo_url() ),
+			'address'    => [
+				'@type'           => 'PostalAddress',
+				'streetAddress'   => 'No 32, Keshava Krupa, 3rd Cross, Anekal Road',
+				'addressLocality' => 'Chandapura, Bangalore',
+				'postalCode'      => '560099',
+				'addressRegion'   => 'Karnataka',
+				'addressCountry'  => 'IN',
+			],
+			'geo'        => [
+				'@type'     => 'GeoCoordinates',
+				'latitude'  => '12.8406',
+				'longitude' => '77.6854',
+			],
+			'areaServed'    => [ 'India', 'Global' ],
+			'priceRange'    => '₹₹₹',
+			'openingHours'  => 'Mo-Fr 09:00-18:00',
+			'sameAs'        => [ 'https://www.linkedin.com/company/syseze/' ],
+		];
+	}
 
 	if ( is_page() ) {
 		$slug = get_post_field( 'post_name', get_queried_object_id() );
