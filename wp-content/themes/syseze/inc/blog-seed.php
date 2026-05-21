@@ -325,3 +325,39 @@ function syseze_remove_blog_bylines() {
 	update_option( 'syseze_blog_no_byline_v1', '1' );
 }
 add_action( 'init', 'syseze_remove_blog_bylines', 101 );
+
+/* ─── one-time update: replace Unsplash hero image hotlinks with local files ─── */
+function syseze_localise_blog_heroes() {
+	if ( get_option( 'syseze_blog_local_heroes_v1' ) ) {
+		return;
+	}
+	$base = get_template_directory_uri() . '/assets/images/blog/';
+	$map  = [
+		'zero-trust-isnt-a-product'            => [
+			'unsplash' => 'photo-1614064641938-3bbee52942c7',
+			'local'    => $base . 'zero-trust-hero.jpg',
+		],
+		'migrating-12000-vms-in-90-days'       => [
+			'unsplash' => 'photo-1558494949-ef010cbdcc31',
+			'local'    => $base . 'migration-hero.jpg',
+		],
+		'helpdesk-that-closes-its-own-tickets' => [
+			'unsplash' => 'photo-1531746790731-6c087fecd65a',
+			'local'    => $base . 'helpdesk-hero.jpg',
+		],
+	];
+	foreach ( $map as $slug => $imgs ) {
+		$post = get_page_by_path( $slug, OBJECT, 'post' );
+		if ( ! $post ) {
+			continue;
+		}
+		$content = str_replace(
+			'https://images.unsplash.com/' . $imgs['unsplash'],
+			$imgs['local'],
+			$post->post_content
+		);
+		wp_update_post( [ 'ID' => $post->ID, 'post_content' => $content ] );
+	}
+	update_option( 'syseze_blog_local_heroes_v1', '1' );
+}
+add_action( 'init', 'syseze_localise_blog_heroes', 102 );
