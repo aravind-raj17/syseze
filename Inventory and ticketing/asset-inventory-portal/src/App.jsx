@@ -4,7 +4,6 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import Login from './auth/Login';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
-import ClientList from './pages/ClientList';
 import ClientAssets from './pages/ClientAssets';
 import EmployeeList from './pages/EmployeeList';
 import TicketList from './pages/TicketList';
@@ -26,7 +25,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
-          <Route path="/clients" element={<AppLayout><ClientList /></AppLayout>} />
           <Route path="/clients/:clientId" element={<AppLayout><ClientAssets /></AppLayout>} />
           <Route path="/clients/:clientId/employees" element={<AppLayout><EmployeeList /></AppLayout>} />
           <Route path="/tickets" element={<AppLayout><TicketList /></AppLayout>} />

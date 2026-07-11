@@ -5,10 +5,14 @@ import { useAssetCounts } from '../hooks/useAssetCounts';
 import { useAllAssets } from '../hooks/useAllAssets';
 import { useTickets } from '../hooks/useTickets';
 import { countByCategory, countByStatus, countByClient } from '../lib/assetStats';
+import { createClient, updateClient, setClientActive } from '../lib/firestore';
 import { CATEGORY_ICONS, ClientsIcon, TicketIcon } from '../components/icons';
+import { EMPTY_CLIENT_FORM } from '../constants';
 import StatTile from '../components/StatTile';
 import DonutChart from '../components/DonutChart';
 import HorizontalBarChart from '../components/HorizontalBarChart';
+import ClientFormDialog from '../components/ClientFormDialog';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const CATEGORY_TILE_COLORS = {
   Laptop: 'blue',
@@ -41,6 +45,11 @@ export default function Dashboard() {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState(null);
+  const [toggleTarget, setToggleTarget] = useState(null);
+  const [saving, setSaving] = useState(false);
+
   const clientIds = useMemo(() => clients.map((c) => c.id), [clients]);
   const counts = useAssetCounts(clientIds);
 
@@ -61,6 +70,34 @@ export default function Dashboard() {
   );
 
   const categoryTileValue = (category) => categoryCounts.find((c) => c.label === category)?.value ?? 0;
+
+  const openNewClient = () => {
+    setEditingClient(null);
+    setFormOpen(true);
+  };
+  const openEditClient = (client) => {
+    setEditingClient(client);
+    setFormOpen(true);
+  };
+
+  const handleSaveClient = async (values) => {
+    setSaving(true);
+    try {
+      if (editingClient) {
+        await updateClient(editingClient.id, values);
+      } else {
+        await createClient(values);
+      }
+      setFormOpen(false);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleToggleConfirm = async () => {
+    await setClientActive(toggleTarget.id, !toggleTarget.active);
+    setToggleTarget(null);
+  };
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-8 p-6">
@@ -99,15 +136,24 @@ export default function Dashboard() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Clients</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Select a client to manage their asset inventory.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Add clients and manage their asset inventory.</p>
           </div>
-          <input
-            type="search"
-            placeholder="Search clients…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="input w-64"
-          />
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="search"
+              placeholder="Search clients…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input w-64"
+            />
+            <button
+              type="button"
+              onClick={openNewClient}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              + Add client
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -117,11 +163,10 @@ export default function Dashboard() {
             {filtered.map((c) => {
               const count = counts[c.id] ?? 0;
               return (
-                <button
+                <div
                   key={c.id}
-                  type="button"
                   onClick={() => navigate(`/clients/${c.id}`)}
-                  className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
+                  className="flex cursor-pointer flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">{c.code}</span>
@@ -132,7 +177,34 @@ export default function Dashboard() {
                   <div className="text-base font-semibold text-slate-900 dark:text-white">{c.name}</div>
                   <p className="text-sm text-slate-500 dark:text-slate-400">{c.contactPerson}</p>
                   <div className="text-xs text-slate-400 dark:text-slate-500">{count === 1 ? '1 asset' : `${count} assets`}</div>
-                </button>
+
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-1 flex flex-wrap gap-1.5 border-t border-slate-100 pt-2 dark:border-slate-800"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/clients/${c.id}/employees`)}
+                      className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                    >
+                      Employees
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openEditClient(c)}
+                      className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setToggleTarget(c)}
+                      className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                    >
+                      {c.active ? 'Deactivate' : 'Reactivate'}
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -142,6 +214,40 @@ export default function Dashboard() {
           <p className="text-sm text-slate-500 dark:text-slate-400">No clients match "{search}".</p>
         )}
       </div>
+
+      <ClientFormDialog
+        open={formOpen}
+        title={editingClient ? 'Edit client' : 'Add client'}
+        initialValues={
+          editingClient
+            ? {
+                name: editingClient.name,
+                code: editingClient.code,
+                contactPerson: editingClient.contactPerson,
+                contactEmail: editingClient.contactEmail,
+                address: editingClient.address,
+              }
+            : EMPTY_CLIENT_FORM
+        }
+        saving={saving}
+        onSave={handleSaveClient}
+        onClose={() => setFormOpen(false)}
+      />
+
+      <ConfirmDialog
+        open={!!toggleTarget}
+        title={toggleTarget ? (toggleTarget.active ? `Deactivate ${toggleTarget.name}?` : `Reactivate ${toggleTarget.name}?`) : ''}
+        body={
+          toggleTarget
+            ? toggleTarget.active
+              ? 'Their assets stay in the system, but the client will be hidden from active dashboards.'
+              : 'The client will reappear on active dashboards.'
+            : ''
+        }
+        confirmLabel={toggleTarget?.active ? 'Deactivate' : 'Reactivate'}
+        onConfirm={handleToggleConfirm}
+        onCancel={() => setToggleTarget(null)}
+      />
     </div>
   );
 }
