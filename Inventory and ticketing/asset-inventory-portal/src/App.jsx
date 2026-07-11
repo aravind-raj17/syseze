@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import ClientList from './pages/ClientList';
 import ClientAssets from './pages/ClientAssets';
+import EmployeeList from './pages/EmployeeList';
 import TicketList from './pages/TicketList';
 import TicketDetail from './pages/TicketDetail';
 
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
           <Route path="/clients" element={<AppLayout><ClientList /></AppLayout>} />
           <Route path="/clients/:clientId" element={<AppLayout><ClientAssets /></AppLayout>} />
+          <Route path="/clients/:clientId/employees" element={<AppLayout><EmployeeList /></AppLayout>} />
           <Route path="/tickets" element={<AppLayout><TicketList /></AppLayout>} />
           <Route path="/tickets/:ticketId" element={<AppLayout><TicketDetail /></AppLayout>} />
         </Route>

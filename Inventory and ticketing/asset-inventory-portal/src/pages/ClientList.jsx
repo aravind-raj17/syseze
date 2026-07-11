@@ -110,6 +110,13 @@ export default function ClientList() {
                       </button>
                       <button
                         type="button"
+                        onClick={() => navigate(`/clients/${c.id}/employees`)}
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                      >
+                        View employees
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => openEdit(c)}
                         className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >

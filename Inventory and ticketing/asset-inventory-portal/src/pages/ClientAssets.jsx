@@ -10,6 +10,7 @@ import AssetFormSlideOver from '../components/AssetFormSlideOver';
 import ConfirmDialog from '../components/ConfirmDialog';
 import BulkUploadDialog from '../components/BulkUploadDialog';
 import ExportMenu from '../components/ExportMenu';
+import ClientSubNav from '../components/ClientSubNav';
 
 const COLUMNS = [
   ['assetTag', 'Asset Tag'],
@@ -141,6 +142,9 @@ export default function ClientAssets() {
           <p className="text-sm text-slate-500 dark:text-slate-400">
             {client?.contactPerson} · {client?.contactEmail}
           </p>
+          <div className="mt-2">
+            <ClientSubNav clientId={clientId} active="assets" />
+          </div>
         </div>
         <ExportMenu assets={filteredSorted} filenameBase={exportFilenameBase} clientName={client?.name} />
         <button

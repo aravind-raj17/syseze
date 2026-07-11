@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { CATEGORIES, STATUSES } from '../constants';
+import { useClientEmployees } from '../hooks/useClientEmployees';
 
 export default function AssetFormSlideOver({ open, title, initialValues, clients, saving, onSave, onClose }) {
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState('');
+  const { employees } = useClientEmployees(values.clientId);
 
   useEffect(() => {
     if (open) {
@@ -16,6 +18,11 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
 
   const set = (field) => (e) => setValues((v) => ({ ...v, [field]: e.target.value }));
 
+  const setClient = (e) => {
+    const clientId = e.target.value;
+    setValues((v) => (v.clientId === clientId ? v : { ...v, clientId, assignedTo: '' }));
+  };
+
   const handleSave = () => {
     if (!values.assetTag.trim() || !values.category || !values.clientId) {
       setError('Asset Tag, Category and Client are required.');
@@ -27,6 +34,11 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
     }
     onSave(values);
   };
+
+  const activeEmployees = employees.filter((e) => e.status === 'Active');
+  // Editing an asset whose assignee was later disabled/retired shouldn't
+  // silently blank the field — keep the current value selectable.
+  const assignedToMissing = values.assignedTo && !activeEmployees.some((e) => e.name === values.assignedTo);
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/50" onClick={onClose}>
@@ -45,7 +57,7 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
           <input className="input" placeholder="e.g. CMART-LAP-001" value={values.assetTag} onChange={set('assetTag')} />
         </Field>
         <Field label="Client *">
-          <select className="input" value={values.clientId} onChange={set('clientId')}>
+          <select className="input" value={values.clientId} onChange={setClient}>
             <option value="">Select client…</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>{c.name} ({c.code})</option>
@@ -80,7 +92,19 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
           <input className="input" placeholder="Site / building" value={values.location} onChange={set('location')} />
         </Field>
         <Field label="Assigned To *">
-          <input className="input" placeholder="Employee name" value={values.assignedTo} onChange={set('assignedTo')} />
+          {values.clientId && activeEmployees.length === 0 && !assignedToMissing ? (
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              No employees added for this organization — add one from the Employees tab.
+            </p>
+          ) : (
+            <select className="input" value={values.assignedTo} onChange={set('assignedTo')} disabled={!values.clientId}>
+              <option value="">Select employee…</option>
+              {assignedToMissing && <option value={values.assignedTo}>{values.assignedTo} (inactive)</option>}
+              {activeEmployees.map((e) => (
+                <option key={e.id} value={e.name}>{e.name} ({e.email})</option>
+              ))}
+            </select>
+          )}
         </Field>
         <Field label="Status">
           <select className="input" value={values.status} onChange={set('status')}>
