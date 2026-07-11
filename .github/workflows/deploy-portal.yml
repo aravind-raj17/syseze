@@ -1,0 +1,47 @@
+name: Deploy Asset Inventory Portal
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Inventory and ticketing/asset-inventory-portal/**'
+      - '.github/workflows/deploy-portal.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Inventory and ticketing/asset-inventory-portal
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ./Inventory and ticketing/asset-inventory-portal/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy dist/ via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: 21
+          local-dir: ./Inventory and ticketing/asset-inventory-portal/dist/
+          server-dir: /assets/
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
