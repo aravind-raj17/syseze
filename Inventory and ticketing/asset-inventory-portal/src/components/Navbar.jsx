@@ -28,6 +28,7 @@ export default function Navbar() {
         </span>
       </div>
       <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
+      <NavLink to="/clients" className={linkClass}>Clients</NavLink>
       <NavLink to="/tickets" className={linkClass}>Tickets</NavLink>
       <span className="ml-auto hidden text-sm text-slate-500 sm:inline dark:text-slate-400">{currentUser?.email}</span>
       <ThemeToggle />
