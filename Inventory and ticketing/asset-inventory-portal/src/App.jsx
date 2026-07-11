@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import ClientList from './pages/ClientList';
 import ClientAssets from './pages/ClientAssets';
+import TicketList from './pages/TicketList';
+import TicketDetail from './pages/TicketDetail';
 
 function AppLayout({ children }) {
   return (
@@ -25,6 +27,8 @@ export default function App() {
           <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
           <Route path="/clients" element={<AppLayout><ClientList /></AppLayout>} />
           <Route path="/clients/:clientId" element={<AppLayout><ClientAssets /></AppLayout>} />
+          <Route path="/tickets" element={<AppLayout><TicketList /></AppLayout>} />
+          <Route path="/tickets/:ticketId" element={<AppLayout><TicketDetail /></AppLayout>} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
