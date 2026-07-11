@@ -8,6 +8,8 @@ import { CATEGORIES, STATUSES, PAGE_SIZE, EMPTY_ASSET_FORM } from '../constants'
 import StatusBadge from '../components/StatusBadge';
 import AssetFormSlideOver from '../components/AssetFormSlideOver';
 import ConfirmDialog from '../components/ConfirmDialog';
+import BulkUploadDialog from '../components/BulkUploadDialog';
+import ExportMenu from '../components/ExportMenu';
 
 const COLUMNS = [
   ['assetTag', 'Asset Tag'],
@@ -37,6 +39,8 @@ export default function ClientAssets() {
   const [editingAsset, setEditingAsset] = useState(null);
   const [retireTarget, setRetireTarget] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [importNotice, setImportNotice] = useState('');
 
   const client = clients.find((c) => c.id === clientId);
 
@@ -107,7 +111,13 @@ export default function ClientAssets() {
     setRetireTarget(null);
   };
 
+  const handleImported = (count) => {
+    setImportNotice(`Imported ${count} asset${count === 1 ? '' : 's'}.`);
+    setTimeout(() => setImportNotice(''), 5000);
+  };
+
   const arrow = (col) => (sortCol === col ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
+  const exportFilenameBase = client ? `${client.code}-assets` : 'assets';
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-4 p-6">
@@ -115,23 +125,31 @@ export default function ClientAssets() {
         <button
           type="button"
           onClick={() => navigate('/dashboard')}
-          className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
         >
           ← Back
         </button>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-slate-900">{client?.name || '…'}</h1>
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{client?.name || '…'}</h1>
             {client && (
-              <span className="rounded-full border border-slate-300 px-2 py-0.5 text-xs font-medium text-slate-500">
+              <span className="rounded-full border border-slate-300 px-2 py-0.5 text-xs font-medium text-slate-500 dark:border-slate-700 dark:text-slate-400">
                 {client.code}
               </span>
             )}
           </div>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {client?.contactPerson} · {client?.contactEmail}
           </p>
         </div>
+        <ExportMenu assets={filteredSorted} filenameBase={exportFilenameBase} clientName={client?.name} />
+        <button
+          type="button"
+          onClick={() => setBulkOpen(true)}
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          Bulk upload
+        </button>
         <button
           type="button"
           onClick={openNewAsset}
@@ -140,6 +158,12 @@ export default function ClientAssets() {
           + Add asset
         </button>
       </div>
+
+      {importNotice && (
+        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-500/10 dark:text-green-400">
+          {importNotice}
+        </p>
+      )}
 
       <div className="flex flex-wrap gap-3">
         <input
@@ -177,11 +201,11 @@ export default function ClientAssets() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-slate-500">Loading assets…</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Loading assets…</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+            <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:text-slate-400">
               <tr>
                 {COLUMNS.map(([col, label]) => (
                   <th key={col} className="cursor-pointer select-none px-4 py-3" onClick={() => sortBy(col)}>
@@ -193,20 +217,20 @@ export default function ClientAssets() {
             </thead>
             <tbody>
               {pageItems.map((a) => (
-                <tr key={a.id} className="border-b border-slate-100 last:border-0">
-                  <td className="px-4 py-3 font-mono text-[13px]">{a.assetTag}</td>
-                  <td className="px-4 py-3">{a.category}</td>
-                  <td className="px-4 py-3">{[a.brand, a.model].filter(Boolean).join(' ') || '—'}</td>
-                  <td className="px-4 py-3 text-slate-500">{a.serialNumber || '—'}</td>
+                <tr key={a.id} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
+                  <td className="px-4 py-3 font-mono text-[13px] dark:text-slate-200">{a.assetTag}</td>
+                  <td className="px-4 py-3 dark:text-slate-200">{a.category}</td>
+                  <td className="px-4 py-3 dark:text-slate-200">{[a.brand, a.model].filter(Boolean).join(' ') || '—'}</td>
+                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{a.serialNumber || '—'}</td>
                   <td className="px-4 py-3"><StatusBadge status={a.status} /></td>
-                  <td className="px-4 py-3">{a.location || '—'}</td>
-                  <td className="px-4 py-3">{a.assignedTo || '—'}</td>
+                  <td className="px-4 py-3 dark:text-slate-200">{a.location || '—'}</td>
+                  <td className="px-4 py-3 dark:text-slate-200">{a.assignedTo || '—'}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <button
                         type="button"
                         onClick={() => openEditAsset(a)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Edit
                       </button>
@@ -214,7 +238,7 @@ export default function ClientAssets() {
                         <button
                           type="button"
                           onClick={() => setRetireTarget(a)}
-                          className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                          className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                         >
                           Retire
                         </button>
@@ -229,18 +253,18 @@ export default function ClientAssets() {
       )}
 
       {!loading && pageItems.length === 0 && (
-        <p className="text-sm text-slate-500">No assets match the current search and filters.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">No assets match the current search and filters.</p>
       )}
 
       {!loading && totalPages > 1 && (
-        <div className="flex items-center justify-between text-sm text-slate-500">
+        <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
           <span>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             <button
               type="button"
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 font-medium disabled:opacity-40"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 font-medium disabled:opacity-40 dark:border-slate-700"
             >
               Previous
             </button>
@@ -248,7 +272,7 @@ export default function ClientAssets() {
               type="button"
               disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 font-medium disabled:opacity-40"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 font-medium disabled:opacity-40 dark:border-slate-700"
             >
               Next
             </button>
@@ -277,6 +301,14 @@ export default function ClientAssets() {
         confirmLabel="Retire asset"
         onConfirm={handleRetireConfirm}
         onCancel={() => setRetireTarget(null)}
+      />
+
+      <BulkUploadDialog
+        open={bulkOpen}
+        clientId={clientId}
+        changedBy={currentUser.email}
+        onClose={() => setBulkOpen(false)}
+        onImported={handleImported}
       />
     </div>
   );

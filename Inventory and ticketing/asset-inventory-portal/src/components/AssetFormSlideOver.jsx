@@ -21,18 +21,22 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
       setError('Asset Tag, Category and Client are required.');
       return;
     }
+    if (!values.assignedTo.trim()) {
+      setError('Assigned To is required.');
+      return;
+    }
     onSave(values);
   };
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/50" onClick={onClose}>
       <div
-        className="flex h-full w-full max-w-[460px] flex-col gap-4 overflow-y-auto bg-white p-6 shadow-xl"
+        className="flex h-full w-full max-w-[460px] flex-col gap-4 overflow-y-auto bg-white p-6 shadow-xl dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-          <button type="button" aria-label="Close" onClick={onClose} className="text-slate-400 hover:text-slate-600">
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h3>
+          <button type="button" aria-label="Close" onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             ✕
           </button>
         </div>
@@ -75,8 +79,8 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
         <Field label="Location">
           <input className="input" placeholder="Site / building" value={values.location} onChange={set('location')} />
         </Field>
-        <Field label="Assigned To">
-          <input className="input" placeholder="Employee name (optional)" value={values.assignedTo} onChange={set('assignedTo')} />
+        <Field label="Assigned To *">
+          <input className="input" placeholder="Employee name" value={values.assignedTo} onChange={set('assignedTo')} />
         </Field>
         <Field label="Status">
           <select className="input" value={values.status} onChange={set('status')}>
@@ -87,13 +91,13 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
           <textarea rows={3} className="input" value={values.notes} onChange={set('notes')} />
         </Field>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
         <div className="mt-2 flex justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancel
           </button>
@@ -113,7 +117,7 @@ export default function AssetFormSlideOver({ open, title, initialValues, clients
 
 function Field({ label, children }) {
   return (
-    <label className="flex flex-col gap-1.5 text-sm font-medium text-slate-700">
+    <label className="flex flex-col gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
       {label}
       {children}
     </label>

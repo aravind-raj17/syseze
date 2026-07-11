@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useClients } from '../hooks/useClients';
 import { createClient, updateClient, setClientActive } from '../lib/firestore';
 import { EMPTY_CLIENT_FORM } from '../constants';
@@ -6,6 +7,7 @@ import ClientFormDialog from '../components/ClientFormDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 export default function ClientList() {
+  const navigate = useNavigate();
   const { clients, loading } = useClients();
   const [formOpen, setFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
@@ -44,8 +46,8 @@ export default function ClientList() {
     <div className="mx-auto flex max-w-[1000px] flex-col gap-4 p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Client management</h1>
-          <p className="text-sm text-slate-500">Add clients and keep their contact details current.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Client management</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Add clients and keep their contact details current.</p>
         </div>
         <button
           type="button"
@@ -57,11 +59,11 @@ export default function ClientList() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-slate-500">Loading clients…</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Loading clients…</p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+            <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:text-slate-400">
               <tr>
                 <th className="px-4 py-3">Client</th>
                 <th className="px-4 py-3">Code</th>
@@ -73,15 +75,25 @@ export default function ClientList() {
             </thead>
             <tbody>
               {clients.map((c) => (
-                <tr key={c.id} className="border-b border-slate-100 last:border-0">
-                  <td className="px-4 py-3 font-medium text-slate-900">{c.name}</td>
-                  <td className="px-4 py-3 text-slate-500">{c.code}</td>
-                  <td className="px-4 py-3">{c.contactPerson}</td>
-                  <td className="px-4 py-3 text-slate-500">{c.contactEmail}</td>
+                <tr key={c.id} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/clients/${c.id}`)}
+                      className="font-medium text-slate-900 hover:text-blue-600 hover:underline dark:text-white dark:hover:text-blue-400"
+                    >
+                      {c.name}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{c.code}</td>
+                  <td className="px-4 py-3 dark:text-slate-200">{c.contactPerson}</td>
+                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{c.contactEmail}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        c.active ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600'
+                        c.active
+                          ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+                          : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
                       }`}
                     >
                       {c.active ? 'Active' : 'Inactive'}
@@ -91,15 +103,22 @@ export default function ClientList() {
                     <div className="flex justify-end gap-2">
                       <button
                         type="button"
+                        onClick={() => navigate(`/clients/${c.id}`)}
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                      >
+                        View assets
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => openEdit(c)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         Edit
                       </button>
                       <button
                         type="button"
                         onClick={() => setToggleTarget(c)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                       >
                         {c.active ? 'Deactivate' : 'Reactivate'}
                       </button>
@@ -113,7 +132,7 @@ export default function ClientList() {
       )}
 
       {!loading && clients.length === 0 && (
-        <p className="text-sm text-slate-500">No clients yet — add your first one.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">No clients yet — add your first one.</p>
       )}
 
       <ClientFormDialog

@@ -1,5 +1,17 @@
-export const CATEGORIES = ['Laptop/Desktop', 'Mobile', 'Network Gear', 'Server', 'Printer', 'CCTV'];
-export const STATUSES = ['Active', 'In Repair', 'Retired', 'Spare'];
+export const CATEGORIES = [
+  'Laptop',
+  'Desktop',
+  'Monitor',
+  'Mouse',
+  'Keyboard',
+  'Headset',
+  'Mobile',
+  'Network Gear',
+  'Server',
+  'Printer',
+  'CCTV',
+];
+export const STATUSES = ['Active', 'Available', 'In Repair', 'Retired', 'Spare'];
 export const PAGE_SIZE = 15;
 
 export const EMPTY_ASSET_FORM = {

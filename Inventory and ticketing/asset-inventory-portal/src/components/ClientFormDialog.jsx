@@ -28,10 +28,10 @@ export default function ClientFormDialog({ open, title, initialValues, saving, o
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-[480px] rounded-xl bg-white p-6 shadow-lg"
+        className="w-full max-w-[480px] rounded-xl bg-white p-6 shadow-lg dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h3>
         <div className="mt-4 flex flex-col gap-4">
           <Field label="Client Name *">
             <input className="input" value={values.name} onChange={set('name')} />
@@ -50,13 +50,13 @@ export default function ClientFormDialog({ open, title, initialValues, saving, o
           <Field label="Address">
             <input className="input" value={values.address} onChange={set('address')} />
           </Field>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
         <div className="mt-6 flex justify-end gap-2">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancel
           </button>
@@ -76,7 +76,7 @@ export default function ClientFormDialog({ open, title, initialValues, saving, o
 
 function Field({ label, children }) {
   return (
-    <label className="flex flex-col gap-1.5 text-sm font-medium text-slate-700">
+    <label className="flex flex-col gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
       {label}
       {children}
     </label>

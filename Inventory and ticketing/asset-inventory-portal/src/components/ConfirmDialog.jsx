@@ -6,16 +6,16 @@ export default function ConfirmDialog({ open, title, body, confirmLabel, onConfi
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg"
+        className="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-        <p className="mt-2 text-sm text-slate-500">{body}</p>
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h3>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{body}</p>
         <div className="mt-6 flex justify-end gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancel
           </button>

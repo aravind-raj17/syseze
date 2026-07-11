@@ -9,7 +9,7 @@ import ClientAssets from './pages/ClientAssets';
 
 function AppLayout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <Navbar />
       {children}
     </div>

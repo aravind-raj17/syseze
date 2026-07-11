@@ -23,8 +23,8 @@ export default function Dashboard() {
     <div className="mx-auto flex max-w-[1140px] flex-col gap-6 p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Clients</h1>
-          <p className="text-sm text-slate-500">Select a client to manage their asset inventory.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Clients</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Select a client to manage their asset inventory.</p>
         </div>
         <input
           type="search"
@@ -36,7 +36,7 @@ export default function Dashboard() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-slate-500">Loading clients…</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Loading clients…</p>
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
           {filtered.map((c) => {
@@ -46,17 +46,17 @@ export default function Dashboard() {
                 key={c.id}
                 type="button"
                 onClick={() => navigate(`/clients/${c.id}`)}
-                className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:shadow-md"
+                className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wide text-blue-600">{c.code}</span>
+                  <span className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">{c.code}</span>
                   {!c.active && (
-                    <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-600">Inactive</span>
+                    <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">Inactive</span>
                   )}
                 </div>
-                <div className="text-base font-semibold text-slate-900">{c.name}</div>
-                <p className="text-sm text-slate-500">{c.contactPerson}</p>
-                <div className="text-xs text-slate-400">{count === 1 ? '1 asset' : `${count} assets`}</div>
+                <div className="text-base font-semibold text-slate-900 dark:text-white">{c.name}</div>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{c.contactPerson}</p>
+                <div className="text-xs text-slate-400 dark:text-slate-500">{count === 1 ? '1 asset' : `${count} assets`}</div>
               </button>
             );
           })}
@@ -64,7 +64,7 @@ export default function Dashboard() {
       )}
 
       {!loading && filtered.length === 0 && (
-        <p className="text-sm text-slate-500">No clients match "{search}".</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">No clients match "{search}".</p>
       )}
     </div>
   );
