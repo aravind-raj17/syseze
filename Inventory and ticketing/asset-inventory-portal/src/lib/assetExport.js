@@ -1,8 +1,8 @@
 import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { toCSV, downloadBlob } from './csv';
 import { CATEGORIES, STATUSES } from '../constants';
+import { createBrandedDoc, addBrandedFooter, BRAND_TABLE_HEAD_STYLE } from './pdfBranding';
 
 export const ASSET_COLUMNS = [
   { key: 'assetTag', label: 'Asset Tag' },
@@ -71,18 +71,20 @@ export function exportAssetsXLSX(assets, filenameBase) {
   XLSX.writeFile(workbook, `${filenameBase}.xlsx`);
 }
 
-export function exportAssetsPDF(assets, filenameBase, clientName) {
-  const doc = new jsPDF({ orientation: 'landscape' });
-  doc.setFontSize(14);
-  doc.text(clientName ? `${clientName} — Asset Inventory` : 'Asset Inventory', 14, 14);
+export async function exportAssetsPDF(assets, filenameBase, clientName) {
+  const { doc, contentStartY } = await createBrandedDoc({
+    title: clientName ? `${clientName} — Asset Inventory` : 'Asset Inventory',
+    subtitle: `${assets.length} asset${assets.length === 1 ? '' : 's'}`,
+  });
 
   autoTable(doc, {
-    startY: 20,
+    startY: contentStartY,
     head: [ASSET_COLUMNS.map((c) => c.label)],
     body: assetRows(assets).map((r) => ASSET_COLUMNS.map((c) => r[c.key])),
     styles: { fontSize: 8 },
-    headStyles: { fillColor: [43, 37, 96] },
+    headStyles: BRAND_TABLE_HEAD_STYLE,
   });
 
+  addBrandedFooter(doc);
   doc.save(`${filenameBase}.pdf`);
 }

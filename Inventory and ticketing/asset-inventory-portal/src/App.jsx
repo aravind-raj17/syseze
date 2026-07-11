@@ -9,6 +9,7 @@ import ClientAssets from './pages/ClientAssets';
 import EmployeeList from './pages/EmployeeList';
 import TicketList from './pages/TicketList';
 import TicketDetail from './pages/TicketDetail';
+import Reports from './pages/Reports';
 
 function AppLayout({ children }) {
   return (
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/clients/:clientId/employees" element={<AppLayout><EmployeeList /></AppLayout>} />
           <Route path="/tickets" element={<AppLayout><TicketList /></AppLayout>} />
           <Route path="/tickets/:ticketId" element={<AppLayout><TicketDetail /></AppLayout>} />
+          <Route path="/reports" element={<AppLayout><Reports /></AppLayout>} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

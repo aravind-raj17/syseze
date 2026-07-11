@@ -3,11 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '../hooks/useClients';
 import { useClientEmployees } from '../hooks/useClientEmployees';
 import { createEmployee, updateEmployee } from '../lib/employees';
+import { exportEmployeesCSV, exportEmployeesXLSX, exportEmployeesPDF } from '../lib/employeeExport';
 import { useAuth } from '../auth/AuthContext';
 import { EMPTY_EMPLOYEE_FORM } from '../employeeConstants';
 import EmployeeStatusBadge from '../components/EmployeeStatusBadge';
 import EmployeeFormDialog from '../components/EmployeeFormDialog';
+import EmployeeBulkUploadDialog from '../components/EmployeeBulkUploadDialog';
 import ClientSubNav from '../components/ClientSubNav';
+import ExportMenu from '../components/ExportMenu';
 
 export default function EmployeeList() {
   const { clientId } = useParams();
@@ -19,8 +22,11 @@ export default function EmployeeList() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [importNotice, setImportNotice] = useState('');
 
   const client = clients.find((c) => c.id === clientId);
+  const exportFilenameBase = client ? `${client.code}-employees` : 'employees';
 
   const openNew = () => {
     setEditingEmployee(null);
@@ -43,6 +49,11 @@ export default function EmployeeList() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleImported = (count) => {
+    setImportNotice(`Imported ${count} employee${count === 1 ? '' : 's'}.`);
+    setTimeout(() => setImportNotice(''), 5000);
   };
 
   return (
@@ -71,6 +82,21 @@ export default function EmployeeList() {
             <ClientSubNav clientId={clientId} active="employees" />
           </div>
         </div>
+        <ExportMenu
+          disabled={employees.length === 0}
+          options={[
+            { label: 'CSV', onSelect: () => exportEmployeesCSV(employees, exportFilenameBase) },
+            { label: 'Excel (.xlsx)', onSelect: () => exportEmployeesXLSX(employees, exportFilenameBase) },
+            { label: 'PDF', onSelect: () => exportEmployeesPDF(employees, exportFilenameBase, `${client?.name || ''} — Employees`) },
+          ]}
+        />
+        <button
+          type="button"
+          onClick={() => setBulkOpen(true)}
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          Bulk upload
+        </button>
         <button
           type="button"
           onClick={openNew}
@@ -79,6 +105,12 @@ export default function EmployeeList() {
           + Add employee
         </button>
       </div>
+
+      {importNotice && (
+        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-500/10 dark:text-green-400">
+          {importNotice}
+        </p>
+      )}
 
       {loading ? (
         <p className="text-sm text-slate-500 dark:text-slate-400">Loading employees…</p>
@@ -133,6 +165,15 @@ export default function EmployeeList() {
         saving={saving}
         onSave={handleSave}
         onClose={() => setFormOpen(false)}
+      />
+
+      <EmployeeBulkUploadDialog
+        open={bulkOpen}
+        clientId={clientId}
+        organizationName={client?.name || ''}
+        changedBy={currentUser.email}
+        onClose={() => setBulkOpen(false)}
+        onImported={handleImported}
       />
     </div>
   );

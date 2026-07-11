@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useClients } from '../hooks/useClients';
 import { useClientAssets } from '../hooks/useClientAssets';
 import { createAsset, updateAsset, retireAsset } from '../lib/firestore';
+import { exportAssetsCSV, exportAssetsXLSX, exportAssetsPDF } from '../lib/assetExport';
 import { useAuth } from '../auth/AuthContext';
 import { CATEGORIES, STATUSES, PAGE_SIZE, EMPTY_ASSET_FORM } from '../constants';
 import StatusBadge from '../components/StatusBadge';
@@ -146,7 +147,14 @@ export default function ClientAssets() {
             <ClientSubNav clientId={clientId} active="assets" />
           </div>
         </div>
-        <ExportMenu assets={filteredSorted} filenameBase={exportFilenameBase} clientName={client?.name} />
+        <ExportMenu
+          disabled={filteredSorted.length === 0}
+          options={[
+            { label: 'CSV', onSelect: () => exportAssetsCSV(filteredSorted, exportFilenameBase) },
+            { label: 'Excel (.xlsx)', onSelect: () => exportAssetsXLSX(filteredSorted, exportFilenameBase) },
+            { label: 'PDF', onSelect: () => exportAssetsPDF(filteredSorted, exportFilenameBase, client?.name) },
+          ]}
+        />
         <button
           type="button"
           onClick={() => setBulkOpen(true)}
