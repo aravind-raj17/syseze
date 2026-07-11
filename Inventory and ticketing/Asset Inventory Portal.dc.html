@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-e556ed45-bcd2-47cb-8614-41d4283b882c/styles.css">
+  <script src="_ds/nocturne-e556ed45-bcd2-47cb-8614-41d4283b882c/_ds_bundle.js"></script>
+  <style>
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    ::placeholder { color: color-mix(in srgb, var(--color-text) 40%, transparent); }
+    select.input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--color-neutral-500) 50%), linear-gradient(135deg, var(--color-neutral-500) 50%, transparent 50%); background-position: calc(100% - 18px) center, calc(100% - 13px) center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+<sc-if value="{{isLogin}}" hint-placeholder-val="{{true}}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:var(--space-8)">
+    <div class="card elev-md" style="width:380px;padding:var(--space-8) var(--space-6);display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:var(--space-2)">
+        <div class="card-kicker">IT Operations</div>
+        <h2 style="margin:0">Asset Inventory Portal</h2>
+        <p class="text-muted" style="margin:0;font-size:13px">Sign in with your staff account.</p>
+      </div>
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input class="input" id="login-email" type="email" placeholder="you@company.com" value="{{loginEmail}}" onChange="{{onLoginEmailChange}}">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input class="input" id="login-password" type="password" placeholder="••••••••" value="{{loginPassword}}" onChange="{{onLoginPasswordChange}}">
+      </div>
+      <sc-if value="{{loginError}}">
+        <p style="color:var(--color-accent-300);font-size:13px;margin:0">{{loginError}}</p>
+      </sc-if>
+      <button type="button" class="btn btn-primary btn-block" onClick="{{onLogin}}">Sign in</button>
+      <p class="text-muted" style="font-size:12px;margin:0">Accounts are provisioned by an admin — there's no public sign-up.</p>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isAuthed}}" hint-placeholder-val="{{false}}">
+
+  <nav class="nav" style="padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--color-divider)">
+    <span class="nav-brand">Asset Inventory Portal</span>
+    <a href="#" onClick="{{onNavDashboard}}" aria-current="{{dashboardCurrent}}">Dashboard</a>
+    <a href="#" onClick="{{onNavClients}}" aria-current="{{clientsCurrent}}">Clients</a>
+    <span class="text-muted" style="font-size:13px;margin-left:var(--space-4)">{{currentUserEmail}}</span>
+    <button type="button" class="btn btn-ghost btn-icon" aria-label="Sign out" onClick="{{onLogout}}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+    </button>
+  </nav>
+
+  <sc-if value="{{isDashboard}}" hint-placeholder-val="{{false}}">
+    <div style="padding:var(--space-6);max-width:1140px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0 0 4px">Clients</h2>
+          <p class="text-muted" style="margin:0;font-size:13px">Select a client to manage their asset inventory.</p>
+        </div>
+        <div style="position:relative;min-width:260px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="position:absolute;left:11px;top:11px;opacity:0.55"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input class="input" style="padding-left:34px" placeholder="Search clients…" value="{{dashboardSearch}}" onChange="{{onDashboardSearchChange}}">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-4)">
+        <sc-for list="{{clientCards}}" as="c" hint-placeholder-count="6">
+          <div class="card elev-sm" style="cursor:pointer" onClick="{{c.onOpen}}">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)">
+              <span class="card-kicker">{{c.code}}</span>
+              <sc-if value="{{c.inactive}}"><span class="tag tag-neutral">Inactive</span></sc-if>
+            </div>
+            <div class="card-title">{{c.name}}</div>
+            <p class="card-body" style="margin:0">{{c.contactPerson}}</p>
+            <div class="card-meta"><span>{{c.assetCountLabel}}</span></div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{noClientsMatch}}">
+        <p class="text-muted">No clients match "{{dashboardSearch}}".</p>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isClients}}" hint-placeholder-val="{{false}}">
+    <div style="padding:var(--space-6);max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0 0 4px">Client management</h2>
+          <p class="text-muted" style="margin:0;font-size:13px">Add clients and keep their contact details current.</p>
+        </div>
+        <button type="button" class="btn btn-primary" onClick="{{onOpenNewClient}}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add client
+        </button>
+      </div>
+      <table class="table">
+        <thead><tr><th>Client</th><th>Code</th><th>Contact</th><th>Email</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{clientRows}}" as="c" hint-placeholder-count="6">
+            <tr>
+              <td>{{c.name}}</td>
+              <td class="text-muted">{{c.code}}</td>
+              <td>{{c.contactPerson}}</td>
+              <td class="text-muted">{{c.contactEmail}}</td>
+              <td><span class="{{c.statusTagClass}}">{{c.statusLabel}}</span></td>
+              <td>
+                <div style="display:flex;gap:var(--space-1);justify-content:flex-end">
+                  <button type="button" class="btn btn-secondary btn-icon" aria-label="Edit client" onClick="{{c.onEdit}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-icon" aria-label="Toggle client status" onClick="{{c.onToggle}}">
+                    <sc-if value="{{c.active}}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>
+                    </sc-if>
+                    <sc-if value="{{c.inactive}}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                    </sc-if>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isAssets}}" hint-placeholder-val="{{false}}">
+    <div style="padding:var(--space-6);max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-4)">
+      <div style="display:flex;align-items:flex-start;gap:var(--space-3)">
+        <button type="button" class="btn btn-secondary btn-icon" aria-label="Back to dashboard" onClick="{{onNavDashboard}}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 18l-6-6 6-6"></path></svg>
+        </button>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:var(--space-2)">
+            <h2 style="margin:0">{{selectedClient.name}}</h2>
+            <span class="tag tag-outline">{{selectedClient.code}}</span>
+          </div>
+          <p class="text-muted" style="margin:2px 0 0;font-size:13px">{{selectedClient.contactPerson}} · {{selectedClient.contactEmail}}</p>
+        </div>
+        <button type="button" class="btn btn-primary" onClick="{{onOpenNewAsset}}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add asset
+        </button>
+      </div>
+
+      <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+        <div style="position:relative;flex:1;min-width:220px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="position:absolute;left:11px;top:11px;opacity:0.55"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input class="input" style="padding-left:34px" placeholder="Search tag, brand, serial, assignee…" value="{{assetSearch}}" onChange="{{onAssetSearchChange}}">
+        </div>
+        <select class="input" style="width:auto;min-width:170px" value="{{categoryFilter}}" onChange="{{onCategoryFilterChange}}">
+          <option value="All">All categories</option>
+          <sc-for list="{{categories}}" as="cat" hint-placeholder-count="6">
+            <option value="{{cat}}">{{cat}}</option>
+          </sc-for>
+        </select>
+        <select class="input" style="width:auto;min-width:150px" value="{{statusFilter}}" onChange="{{onStatusFilterChange}}">
+          <option value="All">All statuses</option>
+          <sc-for list="{{statuses}}" as="st" hint-placeholder-count="4">
+            <option value="{{st}}">{{st}}</option>
+          </sc-for>
+        </select>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="cursor:pointer" onClick="{{onSortAssetTag}}">Asset Tag{{sortArrowAssetTag}}</th>
+            <th style="cursor:pointer" onClick="{{onSortCategory}}">Category{{sortArrowCategory}}</th>
+            <th style="cursor:pointer" onClick="{{onSortBrand}}">Brand / Model{{sortArrowBrand}}</th>
+            <th style="cursor:pointer" onClick="{{onSortSerial}}">Serial No.{{sortArrowSerial}}</th>
+            <th style="cursor:pointer" onClick="{{onSortStatus}}">Status{{sortArrowStatus}}</th>
+            <th style="cursor:pointer" onClick="{{onSortLocation}}">Location{{sortArrowLocation}}</th>
+            <th style="cursor:pointer" onClick="{{onSortAssignedTo}}">Assigned To{{sortArrowAssignedTo}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{assetRows}}" as="a" hint-placeholder-count="6">
+            <tr>
+              <td style="font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:13px">{{a.assetTag}}</td>
+              <td>{{a.category}}</td>
+              <td>{{a.brandModel}}</td>
+              <td class="text-muted" style="font-size:13px">{{a.serialNumber}}</td>
+              <td><span class="{{a.statusTagClass}}">{{a.status}}</span></td>
+              <td>{{a.location}}</td>
+              <td>{{a.assignedToLabel}}</td>
+              <td>
+                <div style="display:flex;gap:var(--space-1);justify-content:flex-end">
+                  <button type="button" class="btn btn-secondary btn-icon" aria-label="Edit asset" onClick="{{a.onEdit}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-icon" aria-label="Retire asset" onClick="{{a.onDelete}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{noAssetsMatch}}">
+        <p class="text-muted">No assets match the current search and filters.</p>
+      </sc-if>
+    </div>
+  </sc-if>
+
+</sc-if>
+
+<sc-if value="{{slideOverOpen}}" hint-placeholder-val="{{false}}">
+  <div style="position:fixed;inset:0;display:flex;justify-content:flex-end;background:color-mix(in srgb, var(--color-neutral-900) 50%, transparent);z-index:40;animation:fadeIn 0.15s ease-out" onClick="{{onCloseAssetForm}}">
+    <div class="elev-lg" style="width:min(460px,100%);height:100%;background:var(--color-surface);padding:var(--space-6);overflow-y:auto;display:flex;flex-direction:column;gap:var(--space-4);animation:slideIn 0.2s ease-out" onClick="{{stopClick}}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h3 style="margin:0">{{assetFormTitle}}</h3>
+        <button type="button" class="btn btn-ghost btn-icon" aria-label="Close" onClick="{{onCloseAssetForm}}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18"></path><path d="M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="field">
+        <label>Asset Tag *</label>
+        <input class="input" placeholder="e.g. CMART-LAP-001" value="{{assetForm.assetTag}}" onChange="{{onAssetTag}}">
+      </div>
+      <div class="field">
+        <label>Client *</label>
+        <select class="input" value="{{assetForm.clientId}}" onChange="{{onAssetClientId}}">
+          <sc-for list="{{clientOptions}}" as="co" hint-placeholder-count="6">
+            <option value="{{co.id}}">{{co.label}}</option>
+          </sc-for>
+        </select>
+      </div>
+      <div class="field">
+        <label>Category *</label>
+        <select class="input" value="{{assetForm.category}}" onChange="{{onAssetCategory}}">
+          <sc-for list="{{categories}}" as="cat" hint-placeholder-count="6">
+            <option value="{{cat}}">{{cat}}</option>
+          </sc-for>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+        <div class="field"><label>Brand</label><input class="input" value="{{assetForm.brand}}" onChange="{{onAssetBrand}}"></div>
+        <div class="field"><label>Model</label><input class="input" value="{{assetForm.model}}" onChange="{{onAssetModel}}"></div>
+      </div>
+      <div class="field"><label>Serial Number</label><input class="input" value="{{assetForm.serialNumber}}" onChange="{{onAssetSerial}}"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+        <div class="field"><label>Purchase Date</label><input class="input" type="date" value="{{assetForm.purchaseDate}}" onChange="{{onAssetPurchaseDate}}"></div>
+        <div class="field"><label>Warranty Expiry</label><input class="input" type="date" value="{{assetForm.warrantyExpiry}}" onChange="{{onAssetWarranty}}"></div>
+      </div>
+      <div class="field"><label>Location</label><input class="input" placeholder="Site / building" value="{{assetForm.location}}" onChange="{{onAssetLocation}}"></div>
+      <div class="field"><label>Assigned To</label><input class="input" placeholder="Employee name (optional)" value="{{assetForm.assignedTo}}" onChange="{{onAssetAssignedTo}}"></div>
+      <div class="field">
+        <label>Status</label>
+        <select class="input" value="{{assetForm.status}}" onChange="{{onAssetStatus}}">
+          <sc-for list="{{statuses}}" as="st" hint-placeholder-count="4">
+            <option value="{{st}}">{{st}}</option>
+          </sc-for>
+        </select>
+      </div>
+      <div class="field"><label>Notes</label><textarea class="input" rows="3" value="{{assetForm.notes}}" onChange="{{onAssetNotes}}"></textarea></div>
+      <sc-if value="{{assetFormError}}">
+        <p style="color:var(--color-accent-300);font-size:13px;margin:0">{{assetFormError}}</p>
+      </sc-if>
+      <div style="display:flex;justify-content:flex-end;gap:var(--space-2);margin-top:var(--space-2)">
+        <button type="button" class="btn btn-secondary" onClick="{{onCloseAssetForm}}">Cancel</button>
+        <button type="button" class="btn btn-primary" onClick="{{onSaveAsset}}">Save asset</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{deleteAssetOpen}}" hint-placeholder-val="{{false}}">
+  <div class="dialog-backdrop" style="z-index:50" onClick="{{onCancelDeleteAsset}}">
+    <div class="dialog elev-lg" role="dialog" aria-modal="true" onClick="{{stopClick}}">
+      <div class="dialog-title">Retire this asset?</div>
+      <div class="dialog-body">"{{deleteAssetLabel}}" will be marked Retired and kept in the record for the activity log — this isn't a hard delete.</div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" onClick="{{onCancelDeleteAsset}}">Cancel</button>
+        <button type="button" class="btn btn-primary" onClick="{{onConfirmDeleteAsset}}">Retire asset</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{clientDialogOpen}}" hint-placeholder-val="{{false}}">
+  <div class="dialog-backdrop" style="z-index:50" onClick="{{onCloseClientForm}}">
+    <div class="dialog elev-lg" role="dialog" aria-modal="true" style="width:min(480px,100%)" onClick="{{stopClick}}">
+      <div class="dialog-title">{{clientFormTitle}}</div>
+      <div class="field"><label>Client Name *</label><input class="input" value="{{clientForm.name}}" onChange="{{onClientName}}"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+        <div class="field"><label>Client Code *</label><input class="input" placeholder="e.g. CMART" value="{{clientForm.code}}" onChange="{{onClientCode}}"></div>
+        <div class="field"><label>Contact Person</label><input class="input" value="{{clientForm.contactPerson}}" onChange="{{onClientContactPerson}}"></div>
+      </div>
+      <div class="field"><label>Contact Email</label><input class="input" type="email" value="{{clientForm.contactEmail}}" onChange="{{onClientEmail}}"></div>
+      <div class="field"><label>Address</label><input class="input" value="{{clientForm.address}}" onChange="{{onClientAddress}}"></div>
+      <sc-if value="{{clientFormError}}">
+        <p style="color:var(--color-accent-300);font-size:13px;margin:0">{{clientFormError}}</p>
+      </sc-if>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" onClick="{{onCloseClientForm}}">Cancel</button>
+        <button type="button" class="btn btn-primary" onClick="{{onSaveClient}}">Save client</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{toggleClientOpen}}" hint-placeholder-val="{{false}}">
+  <div class="dialog-backdrop" style="z-index:50" onClick="{{onCancelToggleClient}}">
+    <div class="dialog elev-lg" role="dialog" aria-modal="true" onClick="{{stopClick}}">
+      <div class="dialog-title">{{toggleClientTitle}}</div>
+      <div class="dialog-body">{{toggleClientBody}}</div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" onClick="{{onCancelToggleClient}}">Cancel</button>
+        <button type="button" class="btn btn-primary" onClick="{{onConfirmToggleClient}}">{{toggleClientAction}}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CATEGORIES = ['Laptop/Desktop', 'Mobile', 'Network Gear', 'Server', 'Printer', 'CCTV'];
+const STATUSES = ['Active', 'In Repair', 'Retired', 'Spare'];
+
+const SEED_CLIENTS = [
+  { id: 'c1', name: 'Chatterjee Mart', code: 'CMART', contactPerson: 'Priya Chatterjee', contactEmail: 'priya@chatterjeemart.com', address: '14 MG Road, Pune', active: true },
+  { id: 'c2', name: 'Blue Coral Group', code: 'BCG', contactPerson: 'Daniel Reyes', contactEmail: 'd.reyes@bluecoralgroup.com', address: '220 Harbor Ave, Miami', active: true },
+  { id: 'c3', name: 'Nimbus Legal', code: 'NIMB', contactPerson: 'Aisha Rahman', contactEmail: 'aisha@nimbuslegal.com', address: '8 Fenwick St, London', active: true },
+  { id: 'c4', name: 'Solace Health', code: 'SOLH', contactPerson: 'Marcus Webb', contactEmail: 'mwebb@solacehealth.org', address: '500 Meridian Pkwy, Austin', active: true },
+  { id: 'c5', name: 'Ferro & Vance', code: 'FRVC', contactPerson: 'Elena Ferro', contactEmail: 'elena@ferrovance.com', address: '77 Rutledge Blvd, Toronto', active: true },
+  { id: 'c6', name: 'Kestrel Logistics', code: 'KSTL', contactPerson: 'Tom Okafor', contactEmail: 'tom.okafor@kestrellogistics.com', address: '19 Dockside Rd, Rotterdam', active: false }
+];
+
+const SEED_ASSETS = [
+  { id: 'a1', clientId: 'c1', assetTag: 'CMART-LAP-001', category: 'Laptop/Desktop', brand: 'Dell', model: 'Latitude 5440', serialNumber: 'DL5440-2291', purchaseDate: '2023-02-11', warrantyExpiry: '2026-02-11', location: 'HQ - Pune', assignedTo: 'Rohan Iyer', status: 'Active', notes: '' },
+  { id: 'a2', clientId: 'c1', assetTag: 'CMART-LAP-002', category: 'Laptop/Desktop', brand: 'Lenovo', model: 'ThinkPad T14', serialNumber: 'LN-T14-8871', purchaseDate: '2022-08-03', warrantyExpiry: '2025-08-03', location: 'HQ - Pune', assignedTo: 'Priya Chatterjee', status: 'Active', notes: '' },
+  { id: 'a3', clientId: 'c1', assetTag: 'CMART-MOB-001', category: 'Mobile', brand: 'Samsung', model: 'Galaxy A54', serialNumber: 'SGA54-5510', purchaseDate: '2023-06-20', warrantyExpiry: '2024-06-20', location: 'HQ - Pune', assignedTo: 'Warehouse Floor', status: 'In Repair', notes: 'Cracked screen, sent for repair 03 Jul.' },
+  { id: 'a4', clientId: 'c1', assetTag: 'CMART-NET-001', category: 'Network Gear', brand: 'Ubiquiti', model: 'UniFi Switch 24', serialNumber: 'UBQ-SW24-119', purchaseDate: '2021-11-01', warrantyExpiry: '2024-11-01', location: 'Server Room - Pune', assignedTo: '', status: 'Active', notes: '' },
+  { id: 'a5', clientId: 'c1', assetTag: 'CMART-PRN-001', category: 'Printer', brand: 'HP', model: 'LaserJet M428', serialNumber: 'HPM428-3341', purchaseDate: '2020-05-14', warrantyExpiry: '2022-05-14', location: 'Front Office - Pune', assignedTo: '', status: 'Spare', notes: 'Kept as backup unit.' },
+  { id: 'a6', clientId: 'c2', assetTag: 'BCG-LAP-001', category: 'Laptop/Desktop', brand: 'Apple', model: 'MacBook Pro 14"', serialNumber: 'APMBP14-0092', purchaseDate: '2023-09-12', warrantyExpiry: '2026-09-12', location: 'Miami Office', assignedTo: 'Daniel Reyes', status: 'Active', notes: '' },
+  { id: 'a7', clientId: 'c2', assetTag: 'BCG-DSK-001', category: 'Laptop/Desktop', brand: 'Dell', model: 'OptiPlex 7010', serialNumber: 'DLOP7010-441', purchaseDate: '2021-03-22', warrantyExpiry: '2024-03-22', location: 'Miami Office', assignedTo: 'Front Desk', status: 'Active', notes: '' },
+  { id: 'a8', clientId: 'c2', assetTag: 'BCG-SRV-001', category: 'Server', brand: 'HPE', model: 'ProLiant DL380', serialNumber: 'HPEDL380-771', purchaseDate: '2020-01-30', warrantyExpiry: '2025-01-30', location: 'Miami Server Room', assignedTo: '', status: 'Active', notes: 'Primary file server.' },
+  { id: 'a9', clientId: 'c2', assetTag: 'BCG-CCTV-001', category: 'CCTV', brand: 'Hikvision', model: 'DS-2CD2143', serialNumber: 'HKV2143-1187', purchaseDate: '2022-07-19', warrantyExpiry: '2024-07-19', location: 'Warehouse Dock', assignedTo: '', status: 'Retired', notes: 'Replaced after storm damage.' },
+  { id: 'a10', clientId: 'c2', assetTag: 'BCG-MOB-001', category: 'Mobile', brand: 'Apple', model: 'iPhone 13', serialNumber: 'APIP13-2290', purchaseDate: '2022-02-08', warrantyExpiry: '2023-02-08', location: 'Miami Office', assignedTo: 'Daniel Reyes', status: 'Active', notes: '' },
+  { id: 'a11', clientId: 'c3', assetTag: 'NIMB-LAP-001', category: 'Laptop/Desktop', brand: 'Apple', model: 'MacBook Air M2', serialNumber: 'APMBA-3312', purchaseDate: '2023-01-17', warrantyExpiry: '2026-01-17', location: 'London Office', assignedTo: 'Aisha Rahman', status: 'Active', notes: '' },
+  { id: 'a12', clientId: 'c3', assetTag: 'NIMB-LAP-002', category: 'Laptop/Desktop', brand: 'Lenovo', model: 'ThinkPad X1 Carbon', serialNumber: 'LNX1C-9021', purchaseDate: '2022-10-05', warrantyExpiry: '2025-10-05', location: 'London Office', assignedTo: 'Legal Team', status: 'Active', notes: '' },
+  { id: 'a13', clientId: 'c3', assetTag: 'NIMB-PRN-001', category: 'Printer', brand: 'Canon', model: 'imageRUNNER 2625', serialNumber: 'CNIR2625-551', purchaseDate: '2019-06-11', warrantyExpiry: '2021-06-11', location: 'London Office', assignedTo: '', status: 'In Repair', notes: 'Paper feed jamming.' },
+  { id: 'a14', clientId: 'c3', assetTag: 'NIMB-NET-001', category: 'Network Gear', brand: 'Cisco', model: 'Catalyst 2960', serialNumber: 'CSC2960-771', purchaseDate: '2021-04-27', warrantyExpiry: '2024-04-27', location: 'London Comms Room', assignedTo: '', status: 'Active', notes: '' },
+  { id: 'a15', clientId: 'c4', assetTag: 'SOLH-DSK-001', category: 'Laptop/Desktop', brand: 'Dell', model: 'OptiPlex 5090', serialNumber: 'DLOP5090-112', purchaseDate: '2022-05-30', warrantyExpiry: '2025-05-30', location: 'Austin Clinic', assignedTo: 'Front Desk', status: 'Active', notes: '' },
+  { id: 'a16', clientId: 'c4', assetTag: 'SOLH-MOB-001', category: 'Mobile', brand: 'Samsung', model: 'Galaxy Tab A8', serialNumber: 'SGTA8-6612', purchaseDate: '2023-03-02', warrantyExpiry: '2024-03-02', location: 'Austin Clinic', assignedTo: 'Nurse Station', status: 'Active', notes: '' },
+  { id: 'a17', clientId: 'c4', assetTag: 'SOLH-SRV-001', category: 'Server', brand: 'Dell', model: 'PowerEdge R450', serialNumber: 'DLR450-991', purchaseDate: '2021-09-14', warrantyExpiry: '2026-09-14', location: 'Austin Server Closet', assignedTo: '', status: 'Active', notes: 'Runs patient records system.' },
+  { id: 'a18', clientId: 'c4', assetTag: 'SOLH-CCTV-001', category: 'CCTV', brand: 'Hikvision', model: 'DS-2CD2385', serialNumber: 'HKV2385-4471', purchaseDate: '2020-12-01', warrantyExpiry: '2022-12-01', location: 'Austin Clinic Entrance', assignedTo: '', status: 'Spare', notes: '' },
+  { id: 'a19', clientId: 'c5', assetTag: 'FRVC-LAP-001', category: 'Laptop/Desktop', brand: 'HP', model: 'EliteBook 840', serialNumber: 'HPEB840-2201', purchaseDate: '2023-04-19', warrantyExpiry: '2026-04-19', location: 'Toronto Office', assignedTo: 'Elena Ferro', status: 'Active', notes: '' },
+  { id: 'a20', clientId: 'c5', assetTag: 'FRVC-LAP-002', category: 'Laptop/Desktop', brand: 'Apple', model: 'MacBook Pro 16"', serialNumber: 'APMBP16-1123', purchaseDate: '2022-11-08', warrantyExpiry: '2025-11-08', location: 'Toronto Office', assignedTo: 'Design Team', status: 'Active', notes: '' },
+  { id: 'a21', clientId: 'c5', assetTag: 'FRVC-PRN-001', category: 'Printer', brand: 'Epson', model: 'WorkForce Pro', serialNumber: 'EPWFP-8871', purchaseDate: '2021-07-25', warrantyExpiry: '2023-07-25', location: 'Toronto Office', assignedTo: '', status: 'Active', notes: '' },
+  { id: 'a22', clientId: 'c5', assetTag: 'FRVC-NET-001', category: 'Network Gear', brand: 'Netgear', model: 'ProSAFE GS724T', serialNumber: 'NGGS724-661', purchaseDate: '2020-02-17', warrantyExpiry: '2023-02-17', location: 'Toronto Comms Closet', assignedTo: '', status: 'Retired', notes: 'Decommissioned after upgrade.' },
+  { id: 'a23', clientId: 'c6', assetTag: 'KSTL-LAP-001', category: 'Laptop/Desktop', brand: 'Lenovo', model: 'ThinkPad E15', serialNumber: 'LNE15-3391', purchaseDate: '2021-06-09', warrantyExpiry: '2024-06-09', location: 'Rotterdam Depot', assignedTo: 'Tom Okafor', status: 'Retired', notes: 'Account inactive — pending pickup.' },
+  { id: 'a24', clientId: 'c6', assetTag: 'KSTL-MOB-001', category: 'Mobile', brand: 'Samsung', model: 'Galaxy XCover 6', serialNumber: 'SGXC6-5502', purchaseDate: '2022-01-14', warrantyExpiry: '2024-01-14', location: 'Rotterdam Depot', assignedTo: 'Dock Crew', status: 'Retired', notes: '' },
+  { id: 'a25', clientId: 'c4', assetTag: 'SOLH-PRN-001', category: 'Printer', brand: 'HP', model: 'LaserJet M507', serialNumber: 'HPM507-7712', purchaseDate: '2023-08-01', warrantyExpiry: '2026-08-01', location: 'Austin Clinic', assignedTo: '', status: 'Active', notes: '' },
+  { id: 'a26', clientId: 'c2', assetTag: 'BCG-LAP-002', category: 'Laptop/Desktop', brand: 'Dell', model: 'Latitude 7420', serialNumber: 'DL7420-8814', purchaseDate: '2023-05-22', warrantyExpiry: '2026-05-22', location: 'Miami Office', assignedTo: 'Sales Team', status: 'Active', notes: '' },
+  { id: 'a27', clientId: 'c3', assetTag: 'NIMB-MOB-001', category: 'Mobile', brand: 'Apple', model: 'iPhone 14', serialNumber: 'APIP14-4471', purchaseDate: '2023-10-11', warrantyExpiry: '2024-10-11', location: 'London Office', assignedTo: 'Aisha Rahman', status: 'Active', notes: '' },
+  { id: 'a28', clientId: 'c1', assetTag: 'CMART-SRV-001', category: 'Server', brand: 'Lenovo', model: 'ThinkSystem SR250', serialNumber: 'LNSR250-661', purchaseDate: '2022-03-14', warrantyExpiry: '2025-03-14', location: 'Server Room - Pune', assignedTo: '', status: 'Active', notes: '' }
+];
+
+const EMPTY_ASSET_FORM = { assetTag: '', clientId: '', category: CATEGORIES[0], brand: '', model: '', serialNumber: '', purchaseDate: '', warrantyExpiry: '', location: '', assignedTo: '', status: 'Active', notes: '' };
+const EMPTY_CLIENT_FORM = { name: '', code: '', contactPerson: '', contactEmail: '', address: '' };
+
+function statusTagClass(status) {
+  if (status === 'Active') return 'tag tag-accent';
+  if (status === 'Spare') return 'tag tag-accent-2';
+  if (status === 'In Repair') return 'tag tag-outline';
+  return 'tag tag-neutral';
+}
+
+class Component extends DCLogic {
+  state = {
+    screen: 'login',
+    loginEmail: '',
+    loginPassword: '',
+    loginError: '',
+    currentUserEmail: '',
+
+    clients: SEED_CLIENTS,
+    assets: SEED_ASSETS,
+
+    dashboardSearch: '',
+    selectedClientId: null,
+
+    assetSearch: '',
+    categoryFilter: 'All',
+    statusFilter: 'All',
+    sortCol: 'assetTag',
+    sortDir: 'asc',
+
+    slideOverOpen: false,
+    editingAssetId: null,
+    assetForm: { ...EMPTY_ASSET_FORM },
+    assetFormError: '',
+
+    deleteAssetId: null,
+
+    clientDialogOpen: false,
+    editingClientId: null,
+    clientForm: { ...EMPTY_CLIENT_FORM },
+    clientFormError: '',
+
+    toggleClientId: null
+  };
+
+  stopClick = (e) => e.stopPropagation();
+
+  onLoginEmailChange = (e) => this.setState({ loginEmail: e.target.value });
+  onLoginPasswordChange = (e) => this.setState({ loginPassword: e.target.value });
+  onLogin = () => {
+    if (!this.state.loginEmail.trim() || !this.state.loginPassword.trim()) {
+      this.setState({ loginError: 'Enter your email and password.' });
+      return;
+    }
+    this.setState({ screen: 'dashboard', currentUserEmail: this.state.loginEmail.trim(), loginError: '' });
+  };
+  onLogout = () => this.setState({ screen: 'login', loginEmail: '', loginPassword: '', loginError: '' });
+
+  onNavDashboard = () => this.setState({ screen: 'dashboard' });
+  onNavClients = () => this.setState({ screen: 'clients' });
+
+  onDashboardSearchChange = (e) => this.setState({ dashboardSearch: e.target.value });
+
+  openClientAssets = (clientId) => this.setState({
+    screen: 'assets', selectedClientId: clientId, assetSearch: '', categoryFilter: 'All', statusFilter: 'All', sortCol: 'assetTag', sortDir: 'asc'
+  });
+
+  onAssetSearchChange = (e) => this.setState({ assetSearch: e.target.value });
+  onCategoryFilterChange = (e) => this.setState({ categoryFilter: e.target.value });
+  onStatusFilterChange = (e) => this.setState({ statusFilter: e.target.value });
+
+  sortBy = (col) => this.setState((s) => ({
+    sortCol: col,
+    sortDir: s.sortCol === col && s.sortDir === 'asc' ? 'desc' : 'asc'
+  }));
+  onSortAssetTag = () => this.sortBy('assetTag');
+  onSortCategory = () => this.sortBy('category');
+  onSortBrand = () => this.sortBy('brand');
+  onSortSerial = () => this.sortBy('serialNumber');
+  onSortStatus = () => this.sortBy('status');
+  onSortLocation = () => this.sortBy('location');
+  onSortAssignedTo = () => this.sortBy('assignedTo');
+
+  onOpenNewAsset = () => this.setState({
+    slideOverOpen: true, editingAssetId: null, assetFormError: '',
+    assetForm: { ...EMPTY_ASSET_FORM, clientId: this.state.selectedClientId }
+  });
+  openEditAsset = (asset) => this.setState({ slideOverOpen: true, editingAssetId: asset.id, assetFormError: '', assetForm: { ...asset } });
+  onCloseAssetForm = () => this.setState({ slideOverOpen: false });
+
+  onAssetTag = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, assetTag: e.target.value } }));
+  onAssetClientId = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, clientId: e.target.value } }));
+  onAssetCategory = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, category: e.target.value } }));
+  onAssetBrand = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, brand: e.target.value } }));
+  onAssetModel = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, model: e.target.value } }));
+  onAssetSerial = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, serialNumber: e.target.value } }));
+  onAssetPurchaseDate = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, purchaseDate: e.target.value } }));
+  onAssetWarranty = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, warrantyExpiry: e.target.value } }));
+  onAssetLocation = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, location: e.target.value } }));
+  onAssetAssignedTo = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, assignedTo: e.target.value } }));
+  onAssetStatus = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, status: e.target.value } }));
+  onAssetNotes = (e) => this.setState((s) => ({ assetForm: { ...s.assetForm, notes: e.target.value } }));
+
+  onSaveAsset = () => {
+    const f = this.state.assetForm;
+    if (!f.assetTag.trim() || !f.category || !f.clientId) {
+      this.setState({ assetFormError: 'Asset Tag, Category and Client are required.' });
+      return;
+    }
+    this.setState((s) => {
+      if (s.editingAssetId) {
+        return { assets: s.assets.map((a) => (a.id === s.editingAssetId ? { ...f, id: s.editingAssetId } : a)), slideOverOpen: false };
+      }
+      const id = 'a' + Date.now();
+      return { assets: [...s.assets, { ...f, id }], slideOverOpen: false };
+    });
+  };
+
+  requestDeleteAsset = (id) => this.setState({ deleteAssetId: id });
+  onCancelDeleteAsset = () => this.setState({ deleteAssetId: null });
+  onConfirmDeleteAsset = () => this.setState((s) => ({
+    assets: s.assets.map((a) => (a.id === s.deleteAssetId ? { ...a, status: 'Retired' } : a)),
+    deleteAssetId: null
+  }));
+
+  onOpenNewClient = () => this.setState({ clientDialogOpen: true, editingClientId: null, clientFormError: '', clientForm: { ...EMPTY_CLIENT_FORM } });
+  openEditClient = (client) => this.setState({ clientDialogOpen: true, editingClientId: client.id, clientFormError: '', clientForm: { name: client.name, code: client.code, contactPerson: client.contactPerson, contactEmail: client.contactEmail, address: client.address } });
+  onCloseClientForm = () => this.setState({ clientDialogOpen: false });
+
+  onClientName = (e) => this.setState((s) => ({ clientForm: { ...s.clientForm, name: e.target.value } }));
+  onClientCode = (e) => this.setState((s) => ({ clientForm: { ...s.clientForm, code: e.target.value } }));
+  onClientContactPerson = (e) => this.setState((s) => ({ clientForm: { ...s.clientForm, contactPerson: e.target.value } }));
+  onClientEmail = (e) => this.setState((s) => ({ clientForm: { ...s.clientForm, contactEmail: e.target.value } }));
+  onClientAddress = (e) => this.setState((s) => ({ clientForm: { ...s.clientForm, address: e.target.value } }));
+
+  onSaveClient = () => {
+    const f = this.state.clientForm;
+    if (!f.name.trim() || !f.code.trim()) {
+      this.setState({ clientFormError: 'Client Name and Client Code are required.' });
+      return;
+    }
+    this.setState((s) => {
+      if (s.editingClientId) {
+        return { clients: s.clients.map((c) => (c.id === s.editingClientId ? { ...c, ...f } : c)), clientDialogOpen: false };
+      }
+      const id = 'c' + Date.now();
+      return { clients: [...s.clients, { id, ...f, active: true }], clientDialogOpen: false };
+    });
+  };
+
+  requestToggleClient = (id) => this.setState({ toggleClientId: id });
+  onCancelToggleClient = () => this.setState({ toggleClientId: null });
+  onConfirmToggleClient = () => this.setState((s) => ({
+    clients: s.clients.map((c) => (c.id === s.toggleClientId ? { ...c, active: !c.active } : c)),
+    toggleClientId: null
+  }));
+
+  renderVals() {
+    const s = this.state;
+    const isLogin = s.screen === 'login';
+    const isAuthed = !isLogin;
+
+    const clients = s.clients;
+    const assets = s.assets;
+
+    const dashSearch = s.dashboardSearch.trim().toLowerCase();
+    const clientCards = clients
+      .filter((c) => !dashSearch || c.name.toLowerCase().includes(dashSearch) || c.code.toLowerCase().includes(dashSearch))
+      .map((c) => {
+        const count = assets.filter((a) => a.clientId === c.id).length;
+        return {
+          id: c.id, code: c.code, name: c.name, contactPerson: c.contactPerson,
+          inactive: !c.active,
+          assetCountLabel: count === 1 ? '1 asset' : count + ' assets',
+          onOpen: () => this.openClientAssets(c.id)
+        };
+      });
+
+    const clientRows = clients.map((c) => ({
+      id: c.id, name: c.name, code: c.code, contactPerson: c.contactPerson, contactEmail: c.contactEmail,
+      active: c.active, inactive: !c.active,
+      statusLabel: c.active ? 'Active' : 'Inactive',
+      statusTagClass: c.active ? 'tag tag-accent' : 'tag tag-neutral',
+      onEdit: () => this.openEditClient(c),
+      onToggle: () => this.requestToggleClient(c.id)
+    }));
+
+    const selectedClient = clients.find((c) => c.id === s.selectedClientId) || { name: '', code: '', contactPerson: '', contactEmail: '' };
+
+    const search = s.assetSearch.trim().toLowerCase();
+    let clientAssets = assets.filter((a) => a.clientId === s.selectedClientId);
+    if (search) {
+      clientAssets = clientAssets.filter((a) =>
+        a.assetTag.toLowerCase().includes(search) ||
+        a.brand.toLowerCase().includes(search) ||
+        a.model.toLowerCase().includes(search) ||
+        a.serialNumber.toLowerCase().includes(search) ||
+        (a.assignedTo || '').toLowerCase().includes(search)
+      );
+    }
+    if (s.categoryFilter !== 'All') clientAssets = clientAssets.filter((a) => a.category === s.categoryFilter);
+    if (s.statusFilter !== 'All') clientAssets = clientAssets.filter((a) => a.status === s.statusFilter);
+
+    const dir = s.sortDir === 'asc' ? 1 : -1;
+    const sorted = [...clientAssets].sort((a, b) => {
+      const va = (a[s.sortCol] || '').toString().toLowerCase();
+      const vb = (b[s.sortCol] || '').toString().toLowerCase();
+      if (va < vb) return -1 * dir;
+      if (va > vb) return 1 * dir;
+      return 0;
+    });
+
+    const assetRows = sorted.map((a) => ({
+      id: a.id,
+      assetTag: a.assetTag,
+      category: a.category,
+      brandModel: [a.brand, a.model].filter(Boolean).join(' '),
+      serialNumber: a.serialNumber || '—',
+      status: a.status,
+      statusTagClass: statusTagClass(a.status),
+      location: a.location || '—',
+      assignedToLabel: a.assignedTo || '—',
+      onEdit: () => this.openEditAsset(a),
+      onDelete: () => this.requestDeleteAsset(a.id)
+    }));
+
+    const arrow = (col) => (s.sortCol === col ? (s.sortDir === 'asc' ? ' \u25B2' : ' \u25BC') : '');
+
+    const clientOptions = clients.map((c) => ({ id: c.id, label: c.name + ' (' + c.code + ')' }));
+
+    const deleteAssetLabel = (() => {
+      const a = assets.find((x) => x.id === s.deleteAssetId);
+      return a ? a.assetTag : '';
+    })();
+
+    const toggleClient = clients.find((c) => c.id === s.toggleClientId);
+
+    return {
+      isLogin, isAuthed,
+      loginEmail: s.loginEmail, loginPassword: s.loginPassword, loginError: s.loginError,
+      onLoginEmailChange: this.onLoginEmailChange, onLoginPasswordChange: this.onLoginPasswordChange, onLogin: this.onLogin,
+      currentUserEmail: s.currentUserEmail,
+      onLogout: this.onLogout, onNavDashboard: this.onNavDashboard, onNavClients: this.onNavClients,
+      dashboardCurrent: s.screen === 'dashboard' ? 'page' : '',
+      clientsCurrent: s.screen === 'clients' ? 'page' : '',
+
+      isDashboard: s.screen === 'dashboard',
+      dashboardSearch: s.dashboardSearch, onDashboardSearchChange: this.onDashboardSearchChange,
+      clientCards, noClientsMatch: clientCards.length === 0,
+
+      isClients: s.screen === 'clients',
+      clientRows, onOpenNewClient: this.onOpenNewClient,
+
+      isAssets: s.screen === 'assets',
+      selectedClient,
+      assetSearch: s.assetSearch, onAssetSearchChange: this.onAssetSearchChange,
+      categories: CATEGORIES, statuses: STATUSES,
+      categoryFilter: s.categoryFilter, onCategoryFilterChange: this.onCategoryFilterChange,
+      statusFilter: s.statusFilter, onStatusFilterChange: this.onStatusFilterChange,
+      onOpenNewAsset: this.onOpenNewAsset,
+      onSortAssetTag: this.onSortAssetTag, onSortCategory: this.onSortCategory, onSortBrand: this.onSortBrand,
+      onSortSerial: this.onSortSerial, onSortStatus: this.onSortStatus, onSortLocation: this.onSortLocation, onSortAssignedTo: this.onSortAssignedTo,
+      sortArrowAssetTag: arrow('assetTag'), sortArrowCategory: arrow('category'), sortArrowBrand: arrow('brand'),
+      sortArrowSerial: arrow('serialNumber'), sortArrowStatus: arrow('status'), sortArrowLocation: arrow('location'), sortArrowAssignedTo: arrow('assignedTo'),
+      assetRows, noAssetsMatch: assetRows.length === 0,
+
+      slideOverOpen: s.slideOverOpen, assetFormTitle: s.editingAssetId ? 'Edit asset' : 'Add asset',
+      assetForm: s.assetForm, assetFormError: s.assetFormError,
+      clientOptions,
+      onAssetTag: this.onAssetTag, onAssetClientId: this.onAssetClientId, onAssetCategory: this.onAssetCategory,
+      onAssetBrand: this.onAssetBrand, onAssetModel: this.onAssetModel, onAssetSerial: this.onAssetSerial,
+      onAssetPurchaseDate: this.onAssetPurchaseDate, onAssetWarranty: this.onAssetWarranty,
+      onAssetLocation: this.onAssetLocation, onAssetAssignedTo: this.onAssetAssignedTo,
+      onAssetStatus: this.onAssetStatus, onAssetNotes: this.onAssetNotes,
+      onCloseAssetForm: this.onCloseAssetForm, onSaveAsset: this.onSaveAsset,
+
+      deleteAssetOpen: !!s.deleteAssetId, deleteAssetLabel,
+      onCancelDeleteAsset: this.onCancelDeleteAsset, onConfirmDeleteAsset: this.onConfirmDeleteAsset,
+
+      clientDialogOpen: s.clientDialogOpen, clientFormTitle: s.editingClientId ? 'Edit client' : 'Add client',
+      clientForm: s.clientForm, clientFormError: s.clientFormError,
+      onClientName: this.onClientName, onClientCode: this.onClientCode, onClientContactPerson: this.onClientContactPerson,
+      onClientEmail: this.onClientEmail, onClientAddress: this.onClientAddress,
+      onCloseClientForm: this.onCloseClientForm, onSaveClient: this.onSaveClient,
+
+      toggleClientOpen: !!s.toggleClientId,
+      toggleClientTitle: toggleClient ? (toggleClient.active ? 'Deactivate ' + toggleClient.name + '?' : 'Reactivate ' + toggleClient.name + '?') : '',
+      toggleClientBody: toggleClient ? (toggleClient.active ? 'Their assets stay in the system, but the client will be hidden from active dashboards.' : 'The client will reappear on active dashboards.') : '',
+      toggleClientAction: toggleClient ? (toggleClient.active ? 'Deactivate' : 'Reactivate') : '',
+      onCancelToggleClient: this.onCancelToggleClient, onConfirmToggleClient: this.onConfirmToggleClient,
+
+      stopClick: this.stopClick
+    };
+  }
+}
+</script>
+</body>
+</html>
