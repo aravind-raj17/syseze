@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTicket } from '../hooks/useTicket';
 import { useTicketComments } from '../hooks/useTicketComments';
 import { useClients } from '../hooks/useClients';
 import { useClientAssets } from '../hooks/useClientAssets';
 import { useAuth } from '../auth/AuthContext';
-import { addComment, updateTicketFields, updateTicketStatus, uploadTicketAttachment } from '../lib/tickets';
+import { addComment, updateTicketFields, updateTicketStatus } from '../lib/tickets';
 import {
   TICKET_STATUSES,
   TICKET_CATEGORIES,
@@ -28,9 +28,7 @@ export default function TicketDetail() {
   const { assets } = useClientAssets(ticket?.clientId);
 
   const [reply, setReply] = useState('');
-  const [pendingFiles, setPendingFiles] = useState([]);
   const [sending, setSending] = useState(false);
-  const fileInputRef = useRef(null);
 
   if (loading) {
     return <p className="p-6 text-sm text-slate-500 dark:text-slate-400">Loading ticket…</p>;
@@ -73,22 +71,15 @@ export default function TicketDetail() {
   };
 
   const handleSendReply = async () => {
-    if (!reply.trim() && pendingFiles.length === 0) return;
+    if (!reply.trim()) return;
     setSending(true);
     try {
-      const attachments = [];
-      for (const file of pendingFiles) {
-        attachments.push(await uploadTicketAttachment(ticketId, file));
-      }
       await addComment(ticketId, {
         type: 'followup',
-        content: reply.trim() || '(attachment)',
+        content: reply.trim(),
         authorEmail: currentUser.email,
-        attachments,
       });
       setReply('');
-      setPendingFiles([]);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     } finally {
       setSending(false);
     }
@@ -129,7 +120,6 @@ export default function TicketDetail() {
                 author={c.authorEmail}
                 createdAt={c.createdAt}
                 content={c.content}
-                attachments={c.attachments}
               />
             )
           )}
@@ -141,13 +131,6 @@ export default function TicketDetail() {
               placeholder="Write a reply…"
               value={reply}
               onChange={(e) => setReply(e.target.value)}
-            />
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              onChange={(e) => setPendingFiles(Array.from(e.target.files || []))}
-              className="text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200 dark:text-slate-400 dark:file:bg-slate-800 dark:file:text-slate-200"
             />
             <button
               type="button"

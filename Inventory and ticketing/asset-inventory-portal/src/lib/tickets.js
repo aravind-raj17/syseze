@@ -9,8 +9,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { computePriority } from '../ticketConstants';
 
 // --- Tickets -------------------------------------------------------------
@@ -101,24 +100,13 @@ export function subscribeTicketComments(ticketId, onData) {
   });
 }
 
-export async function addComment(ticketId, { type = 'followup', content, authorEmail, attachments = [] }) {
+export async function addComment(ticketId, { type = 'followup', content, authorEmail }) {
   await addDoc(collection(db, 'ticketComments'), {
     ticketId,
     type,
     content,
     authorEmail,
-    attachments,
     createdAt: serverTimestamp(),
   });
   await updateDoc(doc(db, 'tickets', ticketId), { updatedAt: serverTimestamp() });
-}
-
-// --- Attachments (Firebase Storage) ---------------------------------------
-
-export async function uploadTicketAttachment(ticketId, file) {
-  const path = `tickets/${ticketId}/${Date.now()}-${file.name}`;
-  const fileRef = ref(storage, path);
-  await uploadBytes(fileRef, file);
-  const url = await getDownloadURL(fileRef);
-  return { name: file.name, url, size: file.size };
 }
