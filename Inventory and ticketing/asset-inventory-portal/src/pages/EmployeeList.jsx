@@ -46,7 +46,7 @@ export default function EmployeeList() {
   };
 
   return (
-    <div className="mx-auto flex max-w-[1000px] flex-col gap-4 p-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-4 p-6">
       <div className="flex items-start gap-3">
         <button
           type="button"
@@ -64,7 +64,12 @@ export default function EmployeeList() {
               </span>
             )}
           </div>
-          <ClientSubNav clientId={clientId} active="employees" />
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            {client?.contactPerson} · {client?.contactEmail}
+          </p>
+          <div className="mt-2">
+            <ClientSubNav clientId={clientId} active="employees" />
+          </div>
         </div>
         <button
           type="button"
