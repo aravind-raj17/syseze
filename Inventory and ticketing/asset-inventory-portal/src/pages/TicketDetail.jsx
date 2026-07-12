@@ -204,49 +204,68 @@ export default function TicketDetail() {
         <div className="flex flex-col gap-4">
           <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
             <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">Ticket</h3>
-            <div className="flex flex-col gap-3">
-              <SidebarField label="Client">
-                <p className="text-sm text-slate-700 dark:text-slate-200">{client?.name || '—'}</p>
-              </SidebarField>
-              <SidebarField label="Related asset">
-                <p className="text-sm text-slate-700 dark:text-slate-200">{asset ? `${asset.assetTag} — ${[asset.brand, asset.model].filter(Boolean).join(' ')}` : '—'}</p>
-              </SidebarField>
-              <SidebarField label="Type">
-                <p className="text-sm text-slate-700 dark:text-slate-200">{ticket.type}</p>
-              </SidebarField>
-              <SidebarField label="Category">
-                <select className="input" defaultValue={ticket.category} onChange={patchField('category')}>
-                  {TICKET_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </SidebarField>
+            <div className="flex flex-col items-stretch gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <SidebarField label="Client">
+                  <p className="truncate text-sm text-slate-700 dark:text-slate-200">{client?.name || '—'}</p>
+                </SidebarField>
+                <SidebarField label="Related asset">
+                  <p className="truncate text-sm text-slate-700 dark:text-slate-200">{asset ? asset.assetTag : '—'}</p>
+                </SidebarField>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <SidebarField label="Type">
+                  <p className="text-sm text-slate-700 dark:text-slate-200">{ticket.type}</p>
+                </SidebarField>
+                <SidebarField label="Category">
+                  <select className="input" defaultValue={ticket.category} onChange={patchField('category')}>
+                    {TICKET_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </SidebarField>
+              </div>
+
+              <hr className="border-slate-100 dark:border-slate-800" />
+
               <SidebarField label="Status">
                 <select className="input" value={ticket.status} onChange={handleStatusChange}>
                   {TICKET_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </SidebarField>
+
+              <div className="grid grid-cols-2 gap-3">
+                <SidebarField label="Urgency">
+                  <select className="input" value={ticket.urgency} onChange={handleUrgencyChange}>
+                    {URGENCY_LEVELS.map((u) => <option key={u} value={u}>{u}</option>)}
+                  </select>
+                </SidebarField>
+                <SidebarField label="Impact">
+                  <select className="input" value={ticket.impact} onChange={handleImpactChange}>
+                    {IMPACT_LEVELS.map((i) => <option key={i} value={i}>{i}</option>)}
+                  </select>
+                </SidebarField>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">Priority</span>
+                <TicketPriorityBadge priority={ticket.priority} />
+              </div>
+
+              <hr className="border-slate-100 dark:border-slate-800" />
+
+              <div className="grid grid-cols-2 gap-3">
+                <SidebarField label="Location">
+                  <input className="input" defaultValue={ticket.location} onBlur={handleLocationBlur} />
+                </SidebarField>
+                <SidebarField label="Due date">
+                  <input type="date" className="input" defaultValue={ticket.dueDate || ''} onBlur={handleDueDateBlur} />
+                </SidebarField>
+              </div>
+
               <SidebarField label="Request source">
                 <select className="input" defaultValue={ticket.source} onChange={patchField('source')}>
                   {REQUEST_SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
-              </SidebarField>
-              <SidebarField label="Urgency">
-                <select className="input" value={ticket.urgency} onChange={handleUrgencyChange}>
-                  {URGENCY_LEVELS.map((u) => <option key={u} value={u}>{u}</option>)}
-                </select>
-              </SidebarField>
-              <SidebarField label="Impact">
-                <select className="input" value={ticket.impact} onChange={handleImpactChange}>
-                  {IMPACT_LEVELS.map((i) => <option key={i} value={i}>{i}</option>)}
-                </select>
-              </SidebarField>
-              <SidebarField label="Priority">
-                <TicketPriorityBadge priority={ticket.priority} />
-              </SidebarField>
-              <SidebarField label="Location">
-                <input className="input" defaultValue={ticket.location} onBlur={handleLocationBlur} />
-              </SidebarField>
-              <SidebarField label="Due date">
-                <input type="date" className="input" defaultValue={ticket.dueDate || ''} onBlur={handleDueDateBlur} />
               </SidebarField>
             </div>
           </div>
