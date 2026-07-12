@@ -1,0 +1,34 @@
+name: Deploy Monthly Report Automation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Inventory and ticketing/monthly-report-automation/**'
+      - '.github/workflows/deploy-monthly-report.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: 21
+          local-dir: ./Inventory and ticketing/monthly-report-automation/
+          server-dir: /monthly-report-automation/
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.env
+            **/service-account.json
+            **/logs/*.log
