@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import { db } from '../firebase';
 
 // Admins can list the whole collection unfiltered (the Firestore rule's
@@ -34,4 +34,12 @@ export async function createDailyTask(values, currentUser) {
     date: new Date().toISOString().slice(0, 10),
     createdAt: serverTimestamp(),
   });
+}
+
+// Admin-only per firestore.rules (allow delete: if isAdmin()) — this is a
+// genuine hard delete, unlike the soft-delete convention used for Clients/
+// Assets/Employees, since a daily task entry isn't a record anything else
+// references.
+export async function deleteDailyTask(id) {
+  await deleteDoc(doc(db, 'dailyTasks', id));
 }

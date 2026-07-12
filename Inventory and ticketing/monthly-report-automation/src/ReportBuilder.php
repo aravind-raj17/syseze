@@ -60,7 +60,7 @@ class ReportBuilder
         $sheet = $spreadsheet->createSheet();
         $sheet->setTitle('Summary');
 
-        $sheet->setCellValue('A1', $client['name'] ?? 'Client');
+        $sheet->setCellValue('A1', self::sanitizeCell($client['name'] ?? 'Client'));
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->setCellValue('A2', "Monthly Asset & Support Report — {$monthLabel}");
         $sheet->getStyle('A2')->getFont()->setItalic(true)->getColor()->setRGB('666666');
@@ -152,7 +152,7 @@ class ReportBuilder
         foreach ($rows as $row) {
             foreach ($keys as $i => $key) {
                 $col = $this->columnLetter($i);
-                $sheet->setCellValue("{$col}{$rowNum}", $row[$key] ?? '');
+                $sheet->setCellValue("{$col}{$rowNum}", self::sanitizeCell($row[$key] ?? ''));
             }
             if ($colorField !== null) {
                 $status = $row[$colorField] ?? '';
@@ -190,6 +190,20 @@ class ReportBuilder
             $counts[$value] = ($counts[$value] ?? 0) + 1;
         }
         return $counts;
+    }
+
+    // CSV/formula-injection guard: PhpSpreadsheet's default value binder
+    // treats a string starting with =, +, -, or @ as a live formula. Every
+    // value written here can originate from staff-entered free text (asset
+    // notes, ticket subjects, client/employee names...) and this workbook
+    // is emailed straight to the client with no human review step, so it
+    // must never reach Excel as anything but literal text.
+    private static function sanitizeCell(mixed $value): mixed
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+        return preg_match('/^[=+\-@\t\r]/', $value) === 1 ? "'" . $value : $value;
     }
 
     private static function formatTimestamp(?string $timestampValue): string

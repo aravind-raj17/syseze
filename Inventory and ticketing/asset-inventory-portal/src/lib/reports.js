@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
-import { toCSV, downloadBlob } from './csv';
+import { toCSV, downloadBlob, sanitizeForSpreadsheet } from './csv';
 import { createBrandedDoc, addBrandedFooter, BRAND_TABLE_HEAD_STYLE } from './pdfBranding';
 import { countByCategory as assetCountByCategory, countByStatus as assetCountByStatus } from './assetStats';
 
@@ -52,7 +52,7 @@ export function exportAllAssetsCSV(assets, clients, filenameBase) {
 export function exportAllAssetsXLSX(assets, clients, filenameBase) {
   const rows = assetReportRows(assets, clients).map((r) => {
     const out = {};
-    ASSET_REPORT_COLUMNS.forEach((c) => { out[c.label] = r[c.key]; });
+    ASSET_REPORT_COLUMNS.forEach((c) => { out[c.label] = sanitizeForSpreadsheet(r[c.key]); });
     return out;
   });
   const worksheet = XLSX.utils.json_to_sheet(rows, { header: ASSET_REPORT_COLUMNS.map((c) => c.label) });
@@ -113,7 +113,7 @@ export function exportAllTicketsCSV(tickets, clients, filenameBase) {
 export function exportAllTicketsXLSX(tickets, clients, filenameBase) {
   const rows = ticketReportRows(tickets, clients).map((r) => {
     const out = {};
-    TICKET_REPORT_COLUMNS.forEach((c) => { out[c.label] = r[c.key]; });
+    TICKET_REPORT_COLUMNS.forEach((c) => { out[c.label] = sanitizeForSpreadsheet(r[c.key]); });
     return out;
   });
   const worksheet = XLSX.utils.json_to_sheet(rows, { header: TICKET_REPORT_COLUMNS.map((c) => c.label) });

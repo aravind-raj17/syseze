@@ -2,8 +2,11 @@ import { useMemo, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import { useClients } from '../hooks/useClients';
 import { useDailyTasks } from '../hooks/useDailyTasks';
-import { createDailyTask } from '../lib/dailyTasks';
+import { createDailyTask, deleteDailyTask } from '../lib/dailyTasks';
+import { exportDailyTasksCSV, exportDailyTasksXLSX, exportDailyTasksPDF } from '../lib/dailyTaskExport';
 import { EMPTY_DAILY_TASK_FORM } from '../dailyTaskConstants';
+import ConfirmDialog from '../components/ConfirmDialog';
+import ExportMenu from '../components/ExportMenu';
 
 export default function DailyTasks() {
   const { currentUser, isAdmin } = useAuth();
@@ -15,6 +18,7 @@ export default function DailyTasks() {
   const [saving, setSaving] = useState(false);
   const [staffFilter, setStaffFilter] = useState('All');
   const [clientFilter, setClientFilter] = useState('All');
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const set = (field) => (e) => setForm((v) => ({ ...v, [field]: e.target.value }));
 
@@ -46,6 +50,13 @@ export default function DailyTasks() {
       setSaving(false);
     }
   };
+
+  const handleDeleteConfirm = async () => {
+    await deleteDailyTask(deleteTarget.id);
+    setDeleteTarget(null);
+  };
+
+  const exportFilenameBase = `daily-tasks-${new Date().toISOString().slice(0, 10)}`;
 
   return (
     <div className="mx-auto flex max-w-[1100px] flex-col gap-6 p-6">
@@ -88,18 +99,30 @@ export default function DailyTasks() {
         </button>
       </form>
 
-      {isAdmin && (
-        <div className="flex flex-wrap gap-3">
-          <select className="input w-auto min-w-[170px]" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
-            <option value="All">All staff</option>
-            {staffOptions.map((name) => <option key={name} value={name}>{name}</option>)}
-          </select>
-          <select className="input w-auto min-w-[170px]" value={clientFilter} onChange={(e) => setClientFilter(e.target.value)}>
-            <option value="All">All clients</option>
-            {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
-        </div>
-      )}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {isAdmin ? (
+          <div className="flex flex-wrap gap-3">
+            <select className="input w-auto min-w-[170px]" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
+              <option value="All">All staff</option>
+              {staffOptions.map((name) => <option key={name} value={name}>{name}</option>)}
+            </select>
+            <select className="input w-auto min-w-[170px]" value={clientFilter} onChange={(e) => setClientFilter(e.target.value)}>
+              <option value="All">All clients</option>
+              {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+        ) : <div />}
+        {isAdmin && (
+          <ExportMenu
+            disabled={filtered.length === 0}
+            options={[
+              { label: 'CSV', onSelect: () => exportDailyTasksCSV(filtered, exportFilenameBase) },
+              { label: 'Excel (.xlsx)', onSelect: () => exportDailyTasksXLSX(filtered, exportFilenameBase) },
+              { label: 'PDF', onSelect: () => exportDailyTasksPDF(filtered, exportFilenameBase, 'Daily Tasks') },
+            ]}
+          />
+        )}
+      </div>
 
       {loading ? (
         <p className="text-sm text-slate-500 dark:text-slate-400">Loading entries…</p>
@@ -114,6 +137,7 @@ export default function DailyTasks() {
                 <th className="px-4 py-3">Issues Attended</th>
                 <th className="px-4 py-3">Login</th>
                 <th className="px-4 py-3">Logout</th>
+                {isAdmin && <th className="px-4 py-3" />}
               </tr>
             </thead>
             <tbody>
@@ -125,6 +149,19 @@ export default function DailyTasks() {
                   <td className="px-4 py-3 dark:text-slate-200">{t.issuesAttended}</td>
                   <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{t.loginTime || '—'}</td>
                   <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{t.logoutTime || '—'}</td>
+                  {isAdmin && (
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(t)}
+                          className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -135,6 +172,15 @@ export default function DailyTasks() {
       {!loading && filtered.length === 0 && (
         <p className="text-sm text-slate-500 dark:text-slate-400">No daily task entries yet.</p>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete this entry?"
+        body={deleteTarget ? `The daily task for "${deleteTarget.clientName}" on ${deleteTarget.date} will be permanently removed.` : ''}
+        confirmLabel="Delete"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

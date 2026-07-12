@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AdminRoute from './auth/AdminRoute';
+import IdleLogoutWatcher from './auth/IdleLogoutWatcher';
 import Login from './auth/Login';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
@@ -17,6 +18,7 @@ import UserManagement from './pages/UserManagement';
 function AppLayout({ children }) {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <IdleLogoutWatcher />
       <Navbar />
       {children}
     </div>

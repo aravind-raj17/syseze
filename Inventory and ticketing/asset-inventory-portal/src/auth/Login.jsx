@@ -21,7 +21,7 @@ function friendlyError(code) {
 }
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, deactivatedNotice, clearDeactivatedNotice } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,7 +73,7 @@ export default function Login() {
             autoComplete="email"
             placeholder="you@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); clearDeactivatedNotice(); }}
             className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30"
           />
         </label>
@@ -90,6 +90,11 @@ export default function Login() {
           />
         </label>
 
+        {deactivatedNotice && (
+          <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
+            Your account has been deactivated. Contact an admin if you think this is a mistake.
+          </p>
+        )}
         {error && <p className="text-sm text-red-400">{error}</p>}
 
         <button

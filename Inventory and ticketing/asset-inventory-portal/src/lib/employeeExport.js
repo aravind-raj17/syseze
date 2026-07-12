@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
-import { toCSV, downloadBlob } from './csv';
+import { toCSV, downloadBlob, sanitizeForSpreadsheet } from './csv';
 import { EMPLOYEE_STATUSES } from '../employeeConstants';
 import { createBrandedDoc, addBrandedFooter, BRAND_TABLE_HEAD_STYLE } from './pdfBranding';
 
@@ -43,7 +43,7 @@ export function exportEmployeesCSV(employees, filenameBase) {
 export function exportEmployeesXLSX(employees, filenameBase) {
   const rows = employeeRows(employees).map((r) => {
     const out = {};
-    EMPLOYEE_COLUMNS.forEach((c) => { out[c.label] = r[c.key]; });
+    EMPLOYEE_COLUMNS.forEach((c) => { out[c.label] = sanitizeForSpreadsheet(r[c.key]); });
     return out;
   });
   const worksheet = XLSX.utils.json_to_sheet(rows, { header: EMPLOYEE_COLUMNS.map((c) => c.label) });

@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
-import { toCSV, downloadBlob } from './csv';
+import { toCSV, downloadBlob, sanitizeForSpreadsheet } from './csv';
 import { CATEGORIES, STATUSES } from '../constants';
 import { createBrandedDoc, addBrandedFooter, BRAND_TABLE_HEAD_STYLE } from './pdfBranding';
 
@@ -62,7 +62,7 @@ export function exportAssetsCSV(assets, filenameBase) {
 export function exportAssetsXLSX(assets, filenameBase) {
   const rows = assetRows(assets).map((r) => {
     const out = {};
-    ASSET_COLUMNS.forEach((c) => { out[c.label] = r[c.key]; });
+    ASSET_COLUMNS.forEach((c) => { out[c.label] = sanitizeForSpreadsheet(r[c.key]); });
     return out;
   });
   const worksheet = XLSX.utils.json_to_sheet(rows, { header: ASSET_COLUMNS.map((c) => c.label) });

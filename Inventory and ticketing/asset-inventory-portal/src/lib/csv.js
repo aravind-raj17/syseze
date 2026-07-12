@@ -57,8 +57,20 @@ export function parseCSV(text) {
   });
 }
 
-function escapeCell(value) {
+// CSV/formula-injection guard: Excel/Sheets treat a cell starting with
+// =, +, -, @, tab or CR as a live formula. Any field a signed-in user can
+// type (asset notes, ticket text, daily-task notes...) ends up in these
+// exports, so every export path — CSV here and the XLSX builders — must
+// run values through this before writing them. Prefixing with a leading
+// apostrophe is the standard mitigation: Excel then renders the text
+// literally instead of evaluating it.
+export function sanitizeForSpreadsheet(value) {
   const s = value === null || value === undefined ? '' : String(value);
+  return /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
+}
+
+function escapeCell(value) {
+  const s = sanitizeForSpreadsheet(value);
   if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
 }
