@@ -58,8 +58,16 @@ service cloud.firestore {
       allow read, write: if isSignedIn();
     }
 
+    // Comments: any signed-in user can read/post, but a comment's author
+    // must match their own verified email (no posting as someone else).
+    // Only the author or an admin can edit/delete a followup — and never a
+    // 'system' entry (the audit trail of field/status changes), which stays
+    // permanent for everyone including admins.
     match /ticketComments/{commentId} {
-      allow read, write: if isSignedIn();
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.authorEmail == request.auth.token.email;
+      allow update, delete: if isSignedIn() && resource.data.type != 'system' &&
+        (isAdmin() || resource.data.authorEmail == request.auth.token.email);
     }
 
     match /activityLog/{logId} {

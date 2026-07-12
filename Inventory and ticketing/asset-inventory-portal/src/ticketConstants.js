@@ -39,6 +39,7 @@ export const EMPTY_TICKET_FORM = {
   urgency: 'Medium',
   impact: 'Medium',
   location: '',
+  dueDate: '',
   source: REQUEST_SOURCES[0],
   assignedTo: '',
   observers: '',

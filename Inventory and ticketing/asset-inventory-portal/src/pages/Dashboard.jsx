@@ -59,6 +59,10 @@ export default function Dashboard() {
     () => tickets.filter((t) => t.status !== 'Solved' && t.status !== 'Closed').length,
     [tickets]
   );
+  const overdueTicketCount = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    return tickets.filter((t) => t.dueDate && t.dueDate < today && t.status !== 'Solved' && t.status !== 'Closed').length;
+  }, [tickets]);
 
   const categoryTileValue = (category) => categoryCounts.find((c) => c.label === category)?.value ?? 0;
 
@@ -85,6 +89,7 @@ export default function Dashboard() {
               />
             ))}
             <StatTile label="Open tickets" value={openTicketCount} icon={TicketIcon} color="red" />
+            <StatTile label="Overdue tickets" value={overdueTicketCount} icon={TicketIcon} color="orange" />
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

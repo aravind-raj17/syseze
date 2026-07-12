@@ -116,9 +116,14 @@ export default function NewTicketDialog({ open, createdBy, defaultClientId, onCl
           Priority: <TicketPriorityBadge priority={priority} />
         </div>
 
-        <Field label="Location">
-          <input className="input" placeholder="Site / building" value={values.location} onChange={set('location')} />
-        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Location">
+            <input className="input" placeholder="Site / building" value={values.location} onChange={set('location')} />
+          </Field>
+          <Field label="Due date (optional)">
+            <input type="date" className="input" value={values.dueDate} onChange={set('dueDate')} />
+          </Field>
+        </div>
 
         <Field label="Request source">
           <select className="input" value={values.source} onChange={set('source')}>
@@ -130,7 +135,7 @@ export default function NewTicketDialog({ open, createdBy, defaultClientId, onCl
           <input className="input" placeholder="Staff email" value={values.assignedTo} onChange={set('assignedTo')} />
         </Field>
 
-        <Field label="Observers (optional)">
+        <Field label="Watchers (optional)">
           <input className="input" placeholder="Comma-separated emails" value={values.observers} onChange={set('observers')} />
         </Field>
 

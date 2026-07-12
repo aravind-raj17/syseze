@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   orderBy,
@@ -50,6 +51,7 @@ export async function createTicket(values, createdBy) {
     requester: createdBy,
     observers,
     assignedTo: values.assignedTo || '',
+    dueDate: values.dueDate || null,
     createdBy,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -57,6 +59,18 @@ export async function createTicket(values, createdBy) {
     closedAt: null,
   });
   return ref_.id;
+}
+
+// Applies the same patch (status, assignedTo, etc.) to several tickets at
+// once — the ticket list's bulk-action toolbar.
+export async function bulkUpdateTickets(ticketIds, patch, changedBy) {
+  for (const ticketId of ticketIds) {
+    if ('status' in patch) {
+      await updateTicketStatus(ticketId, patch.status, changedBy);
+    } else {
+      await updateTicketFields(ticketId, patch, changedBy);
+    }
+  }
 }
 
 // `changes` should already include a recomputed `priority` if urgency or
@@ -109,4 +123,14 @@ export async function addComment(ticketId, { type = 'followup', content, authorE
     createdAt: serverTimestamp(),
   });
   await updateDoc(doc(db, 'tickets', ticketId), { updatedAt: serverTimestamp() });
+}
+
+// Author (or admin, per firestore.rules) only — 'system' audit entries are
+// blocked from edit/delete at the rules level regardless of who asks.
+export async function updateComment(commentId, content) {
+  await updateDoc(doc(db, 'ticketComments', commentId), { content, editedAt: serverTimestamp() });
+}
+
+export async function deleteComment(commentId) {
+  await deleteDoc(doc(db, 'ticketComments', commentId));
 }
