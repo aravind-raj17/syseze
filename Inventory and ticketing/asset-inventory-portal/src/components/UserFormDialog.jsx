@@ -1,35 +1,35 @@
 import { useEffect, useState } from 'react';
-import { EMPLOYEE_STATUSES } from '../employeeConstants';
+import { ROLES, EMPTY_USER_FORM } from '../roleConstants';
 
-export default function EmployeeFormDialog({ open, title, organizationName, initialValues, saving, isAdmin, onSave, onClose }) {
-  const [values, setValues] = useState(initialValues);
+export default function UserFormDialog({ open, saving, onSave, onClose }) {
+  const [values, setValues] = useState(EMPTY_USER_FORM);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (open) {
-      setValues(initialValues);
+      setValues(EMPTY_USER_FORM);
       setError('');
     }
-  }, [open, initialValues]);
+  }, [open]);
 
   if (!open) return null;
 
   const set = (field) => (e) => setValues((v) => ({ ...v, [field]: e.target.value }));
 
-  // "Delete" is this app's delete-equivalent for employees (soft-delete via
-  // status, matching Firestore rules) — only admins can choose it fresh.
-  // Keep it selectable if it's already the saved value, so editing an
-  // already-deleted employee's other fields doesn't silently un-delete them.
-  const availableStatuses = isAdmin
-    ? EMPLOYEE_STATUSES
-    : EMPLOYEE_STATUSES.filter((s) => s !== 'Delete' || values.status === 'Delete');
-
-  const handleSave = () => {
-    if (!values.name.trim() || !values.email.trim()) {
-      setError('Name and Email ID are required.');
+  const handleSave = async () => {
+    if (!values.name.trim() || !values.email.trim() || !values.password.trim()) {
+      setError('Name, Email and Password are required.');
       return;
     }
-    onSave(values);
+    if (values.password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+    try {
+      await onSave(values);
+    } catch (err) {
+      setError(friendlyError(err.code));
+    }
   };
 
   return (
@@ -37,28 +37,23 @@ export default function EmployeeFormDialog({ open, title, organizationName, init
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-[480px] rounded-xl bg-white p-6 shadow-lg dark:bg-slate-900"
+        className="w-full max-w-[440px] rounded-xl bg-white p-6 shadow-lg dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h3>
+        <h3 className="text-base font-semibold text-slate-900 dark:text-white">Create user</h3>
         <div className="mt-4 flex flex-col gap-4">
           <Field label="Name *">
             <input className="input" value={values.name} onChange={set('name')} />
           </Field>
-          <Field label="Email ID *">
+          <Field label="Email *">
             <input type="email" className="input" value={values.email} onChange={set('email')} />
           </Field>
-          <Field label="Organization Name">
-            <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
-              {organizationName}
-            </p>
+          <Field label="Password *">
+            <input type="password" className="input" placeholder="At least 6 characters" value={values.password} onChange={set('password')} />
           </Field>
-          <Field label="License Assigned">
-            <input className="input" placeholder="e.g. M365 E3" value={values.licenseAssigned} onChange={set('licenseAssigned')} />
-          </Field>
-          <Field label="Status">
-            <select className="input" value={values.status} onChange={set('status')}>
-              {availableStatuses.map((s) => <option key={s} value={s}>{s}</option>)}
+          <Field label="Access Level">
+            <select className="input" value={values.role} onChange={set('role')}>
+              {ROLES.map((r) => <option key={r} value={r}>{r === 'admin' ? 'Admin' : 'Standard'}</option>)}
             </select>
           </Field>
           {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
@@ -77,12 +72,25 @@ export default function EmployeeFormDialog({ open, title, organizationName, init
             disabled={saving}
             className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
           >
-            Save employee
+            {saving ? 'Creating…' : 'Create user'}
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+function friendlyError(code) {
+  switch (code) {
+    case 'auth/email-already-in-use':
+      return 'An account with that email already exists.';
+    case 'auth/invalid-email':
+      return 'That email address looks invalid.';
+    case 'auth/weak-password':
+      return 'Password is too weak — use at least 6 characters.';
+    default:
+      return 'Something went wrong creating that user.';
+  }
 }
 
 function Field({ label, children }) {

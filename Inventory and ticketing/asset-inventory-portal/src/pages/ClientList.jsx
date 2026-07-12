@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useClients } from '../hooks/useClients';
 import { createClient, updateClient, setClientActive } from '../lib/firestore';
 import { EMPTY_CLIENT_FORM } from '../constants';
+import { useAuth } from '../auth/AuthContext';
 import ClientFormDialog from '../components/ClientFormDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 export default function ClientList() {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const { clients, loading } = useClients();
   const [formOpen, setFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
@@ -47,15 +49,19 @@ export default function ClientList() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Client management</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Add clients and keep their contact details current.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            {isAdmin ? 'Add clients and keep their contact details current.' : 'View-only — ask an admin to add or edit clients.'}
+          </p>
         </div>
-        <button
-          type="button"
-          onClick={openNew}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          + Add client
-        </button>
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={openNew}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            + Add client
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -115,20 +121,24 @@ export default function ClientList() {
                       >
                         View employees
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => openEdit(c)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setToggleTarget(c)}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                      >
-                        {c.active ? 'Deactivate' : 'Reactivate'}
-                      </button>
+                      {isAdmin && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => openEdit(c)}
+                            className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setToggleTarget(c)}
+                            className="rounded-lg border border-slate-300 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                          >
+                            {c.active ? 'Deactivate' : 'Reactivate'}
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

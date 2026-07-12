@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 // Fill these in from Firebase console: Project settings -> Your apps -> Web app.
 // Safe to expose in frontend code — access is enforced by Firestore security
 // rules (see firestore.rules), not by hiding this config.
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyAWkdz_P9_xJhiiMB1i3aX5jLm_pzo8Iyo',
   authDomain: 'asset-inventory-portal.firebaseapp.com',
   projectId: 'asset-inventory-portal',

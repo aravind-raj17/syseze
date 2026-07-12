@@ -4,7 +4,7 @@ import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -30,7 +30,9 @@ export default function Navbar() {
       <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
       <NavLink to="/clients" className={linkClass}>Clients</NavLink>
       <NavLink to="/tickets" className={linkClass}>Tickets</NavLink>
-      <NavLink to="/reports" className={linkClass}>Reports</NavLink>
+      <NavLink to="/daily-tasks" className={linkClass}>Daily Tasks</NavLink>
+      {isAdmin && <NavLink to="/reports" className={linkClass}>Reports</NavLink>}
+      {isAdmin && <NavLink to="/admin/users" className={linkClass}>User Management</NavLink>}
       <span className="ml-auto hidden text-sm text-slate-500 sm:inline dark:text-slate-400">{currentUser?.email}</span>
       <ThemeToggle />
       <button

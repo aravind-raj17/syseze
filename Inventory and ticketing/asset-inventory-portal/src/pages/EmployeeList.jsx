@@ -15,7 +15,7 @@ import ExportMenu from '../components/ExportMenu';
 export default function EmployeeList() {
   const { clientId } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
   const { clients } = useClients();
   const { employees, loading } = useClientEmployees(clientId);
 
@@ -163,6 +163,7 @@ export default function EmployeeList() {
         organizationName={client?.name || ''}
         initialValues={editingEmployee ? { name: editingEmployee.name, email: editingEmployee.email, licenseAssigned: editingEmployee.licenseAssigned, status: editingEmployee.status } : EMPTY_EMPLOYEE_FORM}
         saving={saving}
+        isAdmin={isAdmin}
         onSave={handleSave}
         onClose={() => setFormOpen(false)}
       />

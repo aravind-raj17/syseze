@@ -26,7 +26,7 @@ const COLUMNS = [
 export default function ClientAssets() {
   const { clientId } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
   const { clients } = useClients();
   const { assets, loading } = useClientAssets(clientId);
 
@@ -246,7 +246,7 @@ export default function ClientAssets() {
                       >
                         Edit
                       </button>
-                      {a.status !== 'Retired' && (
+                      {isAdmin && a.status !== 'Retired' && (
                         <button
                           type="button"
                           onClick={() => setRetireTarget(a)}

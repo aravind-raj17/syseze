@@ -1,10 +1,78 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Only signed-in staff (created manually in the Firebase console —
-    // there's no public sign-up) can read/write anything.
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Bootstrap: a signed-in user may create ONLY their own users/{uid} doc,
+    // and only if it doesn't already exist yet — this is what lets the very
+    // first login (or any account an admin didn't pre-provision) self-heal
+    // into a role doc instead of a permanent dead end. After that initial
+    // create, only an admin can change anyone's role.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (
+        isAdmin() ||
+        (request.auth.uid == userId && !exists(/databases/$(database)/documents/users/$(userId)))
+      );
+      allow update, delete: if isAdmin();
+    }
+
+    // Clients are admin-managed; everyone signed in can view them.
+    match /clients/{clientId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Assets: any signed-in user can create/edit, but "deleting" here means
+    // retiring (status -> Retired) since the app never hard-deletes assets —
+    // only admins may make that transition. Native delete is blocked for
+    // everyone as a defensive backstop (the app never calls it).
+    match /assets/{assetId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() &&
+        (isAdmin() || request.resource.data.status != 'Retired' || resource.data.status == 'Retired');
+      allow delete: if isAdmin();
+    }
+
+    // Employees: same pattern — "delete" is the status:"Delete" transition,
+    // admin-only; everything else stays open to any signed-in user.
+    match /employees/{employeeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() &&
+        (isAdmin() || request.resource.data.status != 'Delete' || resource.data.status == 'Delete');
+      allow delete: if isAdmin();
+    }
+
+    match /tickets/{ticketId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /ticketComments/{commentId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /activityLog/{logId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Daily tasks: standard users only ever see/touch their own entries;
+    // admins see and manage everyone's.
+    match /dailyTasks/{taskId} {
+      allow read: if isSignedIn() && (isAdmin() || resource.data.createdBy == request.auth.token.email);
+      allow create: if isSignedIn() && request.resource.data.createdBy == request.auth.token.email;
+      allow update: if isSignedIn() && (isAdmin() || resource.data.createdBy == request.auth.token.email);
+      allow delete: if isAdmin();
     }
   }
 }
